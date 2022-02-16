@@ -1,0 +1,3 @@
+[submodule "Velocity/vendor/spdlog"]
+	path = Velocity/vendor/spdlog
+	url = https://github.com/gabime/spdlog
