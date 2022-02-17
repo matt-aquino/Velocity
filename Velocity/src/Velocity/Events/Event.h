@@ -1,4 +1,5 @@
 #pragma once
+#include "vlpch.h"
 #include "Velocity/Core.h" // figure out why i can't just use #include "Velocity/Core.h"
 
 namespace Velocity

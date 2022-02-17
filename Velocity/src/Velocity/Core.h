@@ -1,7 +1,4 @@
 #pragma once
-#include <string>
-#include <functional>
-
 
 #ifdef VL_PLATFORM_WINDOWS
 	#ifdef VL_BUILD_DLL

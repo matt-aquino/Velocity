@@ -1,3 +1,4 @@
+#include "vlpch.h"
 #include "Log.h"
 
 namespace Velocity

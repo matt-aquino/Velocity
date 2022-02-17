@@ -1,5 +1,5 @@
+#include "vlpch.h"
 #include "Application.h"
-#include <stdio.h>
 #include "Velocity/Events/AppEvent.h"
 #include "Velocity/Log.h"
 

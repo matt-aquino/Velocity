@@ -1,6 +1,4 @@
 #pragma once
-#include <stdio.h>
-
 #ifdef VL_PLATFORM_WINDOWS
 
 extern Velocity::Application* Velocity::CreateApplication();

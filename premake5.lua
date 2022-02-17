@@ -12,6 +12,9 @@ project "Velocity"
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
 	
+	pchheader "vlpch.h"
+	pchsource "Velocity/src/vlpch.cpp"
+
 	files 
 	{
 		"%{prj.name}/src/**.h",
