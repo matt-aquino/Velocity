@@ -1,5 +1,7 @@
 #include "Application.h"
 #include <stdio.h>
+#include "Velocity/Events/AppEvent.h"
+#include "Velocity/Log.h"
 
 namespace Velocity
 {
@@ -14,7 +16,9 @@ namespace Velocity
 
 	void Application::Run()
 	{
-		while (true)
-			printf("\rWelcome To Velocity!");
+		WindowResizeEvent ev(1280, 700);
+		VL_TRACE(ev);
+
+		while (true);
 	}
 }
