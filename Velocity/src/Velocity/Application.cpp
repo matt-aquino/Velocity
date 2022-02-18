@@ -1,13 +1,12 @@
 #include "vlpch.h"
 #include "Application.h"
 #include "Velocity/Events/AppEvent.h"
-#include "Velocity/Log.h"
 
 namespace Velocity
 {
 	Application::Application()
 	{
-
+		m_Window = std::unique_ptr<Window>(Window::Create());
 	}
 
 	Application::~Application()
@@ -16,9 +15,9 @@ namespace Velocity
 
 	void Application::Run()
 	{
-		WindowResizeEvent ev(1280, 700);
-		VL_TRACE(ev);
-
-		while (true);
+		while (m_Running)
+		{
+			m_Window->OnUpdate();
+		}
 	}
 }
