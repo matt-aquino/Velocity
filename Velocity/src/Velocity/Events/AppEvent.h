@@ -28,7 +28,15 @@ namespace Velocity
 
 	class VELOCITY_API WindowCloseEvent : public Event
 	{
+	public:
 		WindowCloseEvent() {}
+
+		std::string ToString() const override
+		{
+			std::stringstream ss;
+			ss << "WindowCloseEvent";
+			return ss.str();
+		}
 
 		EVENT_CLASS_TYPE(WINDOW_CLOSE)
 		EVENT_CLASS_CATEGORY(EventCategoryApplication)

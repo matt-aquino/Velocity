@@ -18,6 +18,7 @@ namespace Velocity
 
 	class VELOCITY_API KeyPressedEvent : public KeyEvent
 	{
+	public:
 		KeyPressedEvent(int keycode, int repeatCount)
 			: KeyEvent(keycode), m_RepeatCount(repeatCount) {};
 
@@ -39,7 +40,7 @@ namespace Velocity
 	class VELOCITY_API KeyReleasedEvent : public KeyEvent
 	{
 	public:
-		KeyReleasedEvent(int keycode) : m_KeyCode(keycode) {}
+		KeyReleasedEvent(int keycode) : KeyEvent(keycode) {}
 
 		std::string ToString() const override
 		{
