@@ -3,6 +3,7 @@
 #include "Velocity/Events/AppEvent.h"
 #include "Velocity/Events/MouseEvent.h"
 #include "Velocity/Events/KeyEvent.h"
+#include "glad/glad.h"
 
 namespace Velocity
 {
@@ -46,8 +47,11 @@ namespace Velocity
 
 		m_Window = glfwCreateWindow((int)m_Data.Width, (int)m_Data.Height, m_Data.Title.c_str(), nullptr, nullptr);
 		glfwMakeContextCurrent(m_Window);
+		int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
+		VL_CORE_ASSERT(status, "Failed to initialize Glad!");
 		glfwSetWindowUserPointer(m_Window, &m_Data);
 		SetVSync(true);
+		glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
 
 		// set GLFW callbacks
 		glfwSetWindowSizeCallback(m_Window, [](GLFWwindow* window, int width, int height)
@@ -141,6 +145,7 @@ namespace Velocity
 
 	void Windows_Window::OnUpdate()
 	{
+		glClear(GL_COLOR_BUFFER_BIT);
 		glfwPollEvents();
 		glfwSwapBuffers(m_Window);
 	}

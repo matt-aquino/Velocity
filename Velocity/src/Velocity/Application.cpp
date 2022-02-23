@@ -1,5 +1,6 @@
 #include "vlpch.h"
 #include "Application.h"
+#include "glad/glad.h"
 
 namespace Velocity
 {

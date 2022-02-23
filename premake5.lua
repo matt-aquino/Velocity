@@ -7,7 +7,9 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 -- Include directories relative to root folder (solution directory)
 IncludeDir = {}
 IncludeDir["GLFW"] = "Velocity/vendor/GLFW/include"
+IncludeDir["GLAD"] = "Velocity/vendor/glad/include"
 include "Velocity/vendor/GLFW"
+include "Velocity/vendor/GLAD"
 
 project "Velocity"
 	location "Velocity"
@@ -30,12 +32,14 @@ project "Velocity"
 	{
 		"%{prj.name}/src",
 		"%{prj.name}/vendor/spdlog/include",
-		"%{IncludeDir.GLFW}"
+		"%{IncludeDir.GLFW}",
+		"%{IncludeDir.GLAD}"
 	}
 	
 	links
 	{
 		"GLFW",
+		"GLAD",
 		"opengl32.lib"
 	}
 	
@@ -47,7 +51,8 @@ project "Velocity"
 		defines
 		{
 			"VL_PLATFORM_WINDOWS",
-			"VL_BUILD_DLL"			
+			"VL_BUILD_DLL",
+			"GLFW_INCLUDE_NONE"			
 		}
 		
 		postbuildcommands
