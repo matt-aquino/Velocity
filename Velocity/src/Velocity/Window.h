@@ -4,6 +4,8 @@
 #include "Velocity/Core.h"
 #include "Velocity/Events/Event.h"
 
+struct GLFWwindow;
+
 namespace Velocity
 {
 	struct WindowProperties
@@ -26,6 +28,7 @@ namespace Velocity
 		virtual void OnUpdate() = 0;
 		virtual unsigned int GetWidth() const = 0;
 		virtual unsigned int GetHeight() const = 0;
+		virtual GLFWwindow& GetWindow() const = 0;
 
 		virtual void SetEventCallback(const EventCallbackFn& callback) = 0;
 		virtual void SetVSync(bool enabled) = 0;

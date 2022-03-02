@@ -23,6 +23,9 @@
 #ifndef __glad_h_
 #define __glad_h_
 
+// we are using glad for gl loading, so don't use ImGui's GL loader
+#define IMGUI_IMPL_OPENGL_LOADER_CUSTOM 
+
 #ifdef __gl_h_
 #error OpenGL header already included, remove this include, glad already provides it
 #endif

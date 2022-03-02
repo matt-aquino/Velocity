@@ -4,3 +4,6 @@
 [submodule "Velocity/vendor/GLFW"]
 	path = Velocity/vendor/GLFW
 	url = https://github.com/matt-aquino/glfw
+[submodule "Velocity/vendor/ImGui"]
+	path = Velocity/vendor/ImGui
+	url = https://github.com/matt-aquino/imgui
