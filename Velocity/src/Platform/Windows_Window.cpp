@@ -58,7 +58,7 @@ namespace Velocity
 		
 		glfwSetWindowUserPointer(m_Window, &m_Data);
 		SetVSync(true);
-		glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
+		glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
 
 		// set GLFW callbacks
 		glfwSetWindowSizeCallback(m_Window, [](GLFWwindow* window, int width, int height)
@@ -104,6 +104,13 @@ namespace Velocity
 					break;
 				}
 			}
+		});
+		
+		glfwSetCharCallback(m_Window, [](GLFWwindow* window, unsigned int keycode)
+		{
+			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+			KeyTypedEvent event(keycode);
+			data.EventCallback(event);
 		});
 
 		glfwSetMouseButtonCallback(m_Window, [](GLFWwindow* window, int button, int action, int mods)

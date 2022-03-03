@@ -1,7 +1,8 @@
 workspace "Velocity"
 	architecture "x64"
 	configurations {"Debug", "Release", "Dist"}
-	
+	startproject "Sandbox"
+
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 -- Include directories relative to root folder (solution directory)
@@ -13,10 +14,12 @@ include "Velocity/vendor/GLFW"
 include "Velocity/vendor/GLAD"
 include "Velocity/vendor/ImGui"
 
+
 project "Velocity"
 	location "Velocity"
 	kind "SharedLib"
 	language "C++"
+	staticruntime "off"
 	
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
@@ -49,7 +52,6 @@ project "Velocity"
 	
 	filter "system:windows"
 		cppdialect "C++17"
-		staticruntime "On"
 		systemversion "latest"
 		
 		defines
@@ -66,23 +68,24 @@ project "Velocity"
 		
 	filter "configurations:Debug"
 		defines "VL_DEBUG"
-		buildoptions "/MDd"
+		runtime "Debug"
 		symbols "On"
 		
 	filter "configurations:Release"
 		defines "VL_RELEASE"
-		buildoptions "/MD"
+		runtime "Release"
 		optimize"On"
 		
 	filter "configurations:Dist"
 		defines "VL_DIST"
-		buildoptions "/MD"
+		runtime "Release"
 		optimize"On"
 		
 project "Sandbox"
 	location "Sandbox"
 	kind "ConsoleApp"
 	language "C++"
+	staticruntime "off"
 	
 	targetdir  ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir  ("bin-int/" .. outputdir .. "/%{prj.name}")
@@ -103,7 +106,6 @@ project "Sandbox"
 	
 	filter "system:windows"
 		cppdialect "C++17"
-		staticruntime "On"
 		systemversion "latest"
 		
 		defines
@@ -113,15 +115,15 @@ project "Sandbox"
 		
 	filter "configurations:Debug"
 		defines "VL_DEBUG"
-		buildoptions "/MDd"
+		runtime "Debug"
 		symbols "On"
 		
 	filter "configurations:Release"
 		defines "VL_RELEASE"
-		buildoptions "/MD"
+		runtime "Release"
 		optimize"On"
 		
 	filter "configurations:Dist"
 		defines "VL_DIST"
-		buildoptions "/MD"
+		runtime "Release"
 		optimize"On"

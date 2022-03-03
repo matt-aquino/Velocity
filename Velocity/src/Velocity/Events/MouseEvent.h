@@ -15,6 +15,9 @@ namespace Velocity
 			ss << "MouseMovedEvent: " << m_MouseX << ", " << m_MouseY;
 			return ss.str();
 		}
+
+		inline float GetX() const { return m_MouseX; }
+		inline float GetY() const { return m_MouseY; }
 		
 		EVENT_CLASS_TYPE(MOUSE_MOVE)
 		EVENT_CLASS_CATEGORY(EventCategoryMouse | EventCategoryInput)
