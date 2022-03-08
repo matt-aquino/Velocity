@@ -10,6 +10,7 @@ IncludeDir = {}
 IncludeDir["GLFW"] = "Velocity/vendor/GLFW/include"
 IncludeDir["GLAD"] = "Velocity/vendor/glad/include"
 IncludeDir["ImGui"] = "Velocity/vendor/ImGui"
+IncludeDir["glm"] = "Velocity/vendor/glm"
 include "Velocity/vendor/GLFW"
 include "Velocity/vendor/GLAD"
 include "Velocity/vendor/ImGui"
@@ -30,7 +31,9 @@ project "Velocity"
 	files 
 	{
 		"%{prj.name}/src/**.h",
-		"%{prj.name}/src/**.cpp"
+		"%{prj.name}/src/**.cpp",
+		"%{prj.name}/vendor/glm/glm/**.hpp",
+		"%{prj.name}/vendor/glm/glm/**.inl",
 	}
 	
 	includedirs 
@@ -39,7 +42,8 @@ project "Velocity"
 		"%{prj.name}/vendor/spdlog/include",
 		"%{IncludeDir.GLFW}",
 		"%{IncludeDir.GLAD}",
-		"%{IncludeDir.ImGui}"
+		"%{IncludeDir.ImGui}",
+		"%{IncludeDir.glm}"
 	}
 	
 	links
@@ -93,13 +97,15 @@ project "Sandbox"
 	files 
 	{
 		"%{prj.name}/src/**.h",
-		"%{prj.name}/src/**.cpp"
+		"%{prj.name}/src/**.cpp",
+
 	}
 	
 	includedirs 
 	{
 		"Velocity/vendor/spdlog/include",
-		"Velocity/src"
+		"Velocity/src",
+		"%{IncludeDir.glm}"
 	}
 	
 	links{ "Velocity" }

@@ -2,6 +2,9 @@
 #include "Application.h"
 #include "glad/glad.h"
 
+#include "Input.h"
+#include "Velocity/KeyCodes.h"
+
 namespace Velocity
 {
 #define BIND_EVENT_FUNC(x) std::bind(&Application::x, this, std::placeholders::_1)
@@ -26,6 +29,9 @@ namespace Velocity
 		{
 			for (Layer* layer : m_LayerStack)
 				layer->OnUpdate();
+
+			if (Input::IsKeyPressed(VL_KEY_ESCAPE))
+				m_Running = false;
 
 			m_Window->OnUpdate();
 		}

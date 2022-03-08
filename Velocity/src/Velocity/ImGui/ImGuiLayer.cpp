@@ -34,9 +34,13 @@ namespace Velocity
 		io.BackendFlags |= ImGuiConfigFlags_DockingEnable;
 		io.BackendFlags |= ImGuiConfigFlags_ViewportsEnable;
 		
-		ImGui_ImplGlfw_InitForOpenGL(&Application::Get().GetWindow().GetWindow(), true);
-		ImGui_ImplOpenGL3_Init("#version 430 core");
-		VL_INFO("{0} Attached!", m_DebugName);
+		bool imguiGlfwInitSuccess = ImGui_ImplGlfw_InitForOpenGL(&Application::Get().GetWindow().GetWindow(), true);
+		bool imguiOpenGLInitSuccess = ImGui_ImplOpenGL3_Init((char*)glGetString(430));
+		//ImGui_ImplOpenGL3_Init("#version 430 core");
+		VL_INFO("ImGui GLFW Init Success: {0}", imguiGlfwInitSuccess);
+		VL_INFO("ImGui OpenGL Init Success: {0}", imguiOpenGLInitSuccess);
+		//VL_INFO("{0} Attached!", m_DebugName);
+		//VL_INFO("{0} Attached!", m_DebugName);
 	}
 	
 	void ImGuiLayer::OnDetach()
@@ -60,8 +64,41 @@ namespace Velocity
 		static bool show = true;
 		ImGui::ShowDemoWindow(&show);
 
+		static float f = 0.0f;
+		static int counter = 0;
+
+		ImGui::Begin("Hello, world!");                          // Create a window called "Hello, world!" and append into it.
+
+		ImGui::Text("This is some useful text.");               // Display some text (you can use a format strings too)
+		ImGui::Checkbox("Demo Window", &show);      // Edit bools storing our window open/close state
+
+		ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
+
+		if (ImGui::Button("Button"))                            // Buttons return true when clicked (most widgets return true when                       edited/activated)
+			counter++;
+
+		ImGui::SameLine();
+		ImGui::Text("counter = %d", counter);
+
+		float frameRate = 1000.0f / ImGui::GetIO().Framerate;
+		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", frameRate, ImGui::GetIO().Framerate);
+		std::cout << "\rFrame rate: " << frameRate;
+		ImGui::End();
+
+
 		ImGui::Render();
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
+		// Update and Render additional Platform Windows
+		// (Platform functions may change the current OpenGL context, so we save/restore it to make it easier to paste this code elsewhere.
+		//  For this specific demo app we could also call glfwMakeContextCurrent(window) directly)
+		if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+		{
+			GLFWwindow* backup_current_context = glfwGetCurrentContext();
+			ImGui::UpdatePlatformWindows();
+			ImGui::RenderPlatformWindowsDefault();
+			glfwMakeContextCurrent(backup_current_context);
+		}
 	}
 
 	// EVENTS

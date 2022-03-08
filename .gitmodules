@@ -7,3 +7,6 @@
 [submodule "Velocity/vendor/ImGui"]
 	path = Velocity/vendor/ImGui
 	url = https://github.com/matt-aquino/imgui
+[submodule "Velocity/vendor/glm"]
+	path = Velocity/vendor/glm
+	url = https://github.com/g-truc/glm.git
