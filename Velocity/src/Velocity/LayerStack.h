@@ -21,6 +21,6 @@ namespace Velocity
 
 	private:
 		std::vector<Layer*> m_Layers;
-		int m_LayerInsertIndex;
+		unsigned int m_LayerInsertIndex;
 	};
 }

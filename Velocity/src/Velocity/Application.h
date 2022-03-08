@@ -5,6 +5,7 @@
 #include "Events/Event.h"
 #include "Events/AppEvent.h"
 #include "Window.h"
+#include "ImGui/ImGuiLayer.h"
 
 namespace Velocity
 {
@@ -30,6 +31,8 @@ namespace Velocity
 		bool OnWindowClose(WindowCloseEvent& e);
 
 		std::unique_ptr<Window> m_Window;
+		ImGuiLayer* m_ImGuiLayer;
+
 		bool m_Running = true;
 		LayerStack m_LayerStack;
 

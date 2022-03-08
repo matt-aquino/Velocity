@@ -5,8 +5,7 @@
 #include "Velocity/Events/KeyEvent.h"
 #include "glad/glad.h"
 
-#include "Velocity/ImGui/ImGuiGLFW.h"
-#include "Platform/OpenGL/ImGuiOpenGLRenderer.h"
+#include "backends/imgui_impl_glfw.h"
 
 namespace Velocity
 {
@@ -160,7 +159,6 @@ namespace Velocity
 	void Windows_Window::OnUpdate()
 	{
 		glfwPollEvents();
-		glClear(GL_COLOR_BUFFER_BIT);
 		glfwSwapBuffers(m_Window);
 	}
 
