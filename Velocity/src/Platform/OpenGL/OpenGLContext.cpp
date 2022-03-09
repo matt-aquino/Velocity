@@ -17,7 +17,8 @@ void Velocity::OpenGLContext::Init()
 	int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 	VL_CORE_ASSERT(status, "Failed to initialize Glad!");
 
-	glClearColor(0.3, 0.3, 0.3, 1.0);
+	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+	VL_CORE_INFO("GPU: {0}, OpenGL Version: {1}", glGetString(GL_RENDERER), glGetString(GL_VERSION));
 }
 
 void Velocity::OpenGLContext::SwapBuffers()

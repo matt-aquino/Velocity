@@ -85,7 +85,14 @@ namespace Velocity
 	void ImGuiLayer::OnImGuiRender()
 	{
 		static bool show = true;
-		ImGui::ShowDemoWindow(&show);
+
+		ImGui::Begin("Test Window");
+		ImGui::Button("Just a button!", ImVec2(70.0, 50.0));
+		ImGui::Checkbox("Toggle Demo Window", &show);
+		ImGui::End();
+
+		if (show)
+			ImGui::ShowDemoWindow(&show);
 	}
 
 }
