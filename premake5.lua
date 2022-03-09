@@ -18,9 +18,10 @@ include "Velocity/vendor/ImGui"
 
 project "Velocity"
 	location "Velocity"
-	kind "SharedLib"
+	kind "StaticLib"
 	language "C++"
-	staticruntime "off"
+	cppdialect "C++17"
+	staticruntime "on"
 	
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
@@ -53,11 +54,12 @@ project "Velocity"
 		"ImGui",
 		"opengl32.lib"
 	}
-	
+
+	defines { "_CRT_SECURE_NO_WARNINGS" }
+
 	filter "system:windows"
-		cppdialect "C++17"
 		systemversion "latest"
-		
+
 		defines
 		{
 			"VL_PLATFORM_WINDOWS",
@@ -65,31 +67,27 @@ project "Velocity"
 			"GLFW_INCLUDE_NONE"			
 		}
 		
-		postbuildcommands
-		{
-			("{COPY} %{cfg.buildtarget.relpath} ../bin/" .. outputdir .. "/Sandbox")
-		}
-		
 	filter "configurations:Debug"
 		defines "VL_DEBUG"
 		runtime "Debug"
-		symbols "On"
+		symbols "on"
 		
 	filter "configurations:Release"
 		defines "VL_RELEASE"
 		runtime "Release"
-		optimize"On"
+		optimize "on"
 		
 	filter "configurations:Dist"
 		defines "VL_DIST"
 		runtime "Release"
-		optimize"On"
+		optimize "on"
 		
 project "Sandbox"
 	location "Sandbox"
 	kind "ConsoleApp"
 	language "C++"
-	staticruntime "off"
+	cppdialect "C++17"
+	staticruntime "on"
 	
 	targetdir  ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir  ("bin-int/" .. outputdir .. "/%{prj.name}")
@@ -105,13 +103,14 @@ project "Sandbox"
 	{
 		"Velocity/vendor/spdlog/include",
 		"Velocity/src",
+		"Velocity/vendor",
 		"%{IncludeDir.glm}"
 	}
 	
 	links{ "Velocity" }
 	
+
 	filter "system:windows"
-		cppdialect "C++17"
 		systemversion "latest"
 		
 		defines
@@ -122,14 +121,14 @@ project "Sandbox"
 	filter "configurations:Debug"
 		defines "VL_DEBUG"
 		runtime "Debug"
-		symbols "On"
+		symbols "on"
 		
 	filter "configurations:Release"
 		defines "VL_RELEASE"
 		runtime "Release"
-		optimize"On"
+		optimize "on"
 		
 	filter "configurations:Dist"
 		defines "VL_DIST"
 		runtime "Release"
-		optimize"On"
+		optimize "on"

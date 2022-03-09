@@ -1,11 +1,16 @@
 #pragma once
 
+
 #ifdef VL_PLATFORM_WINDOWS
+#if VL_DYNLINK
 	#ifdef VL_BUILD_DLL
 		#define VELOCITY_API __declspec(dllexport)
 	#else
 		#define VELOCITY_API __declspec(dllimport)
 	#endif
+#else
+	#define VELOCITY_API
+#endif
 
 #else
 	#error Velocity only supports Windows!

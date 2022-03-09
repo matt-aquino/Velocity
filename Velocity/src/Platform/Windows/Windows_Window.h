@@ -1,6 +1,8 @@
 #pragma once
 #include "Velocity/Window.h"
-#include "GLFW/glfw3.h"
+#include "Velocity/Renderer/GraphicsContext.h"
+
+#include <GLFW/glfw3.h>
 
 namespace Velocity
 {
@@ -27,7 +29,8 @@ namespace Velocity
 		virtual void Shutdown();
 
 		GLFWwindow* m_Window;
-		
+		GraphicsContext* m_Context;
+
 		struct WindowData
 		{
 			std::string Title = "";

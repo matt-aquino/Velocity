@@ -1,11 +1,11 @@
 #include "vlpch.h"
 #include "Windows_Window.h"
+
 #include "Velocity/Events/AppEvent.h"
 #include "Velocity/Events/MouseEvent.h"
 #include "Velocity/Events/KeyEvent.h"
-#include "glad/glad.h"
 
-#include "backends/imgui_impl_glfw.h"
+#include "Platform/OpenGL/OpenGLContext.h"
 
 namespace Velocity
 {
@@ -37,6 +37,7 @@ namespace Velocity
 		m_Data.Width = props.Width;
 		m_Data.Height = props.Height;
 
+
 		VL_CORE_INFO("Creating Application {0} ({1}, {2})", m_Data.Title, m_Data.Width, m_Data.Height);
 
 		if (!s_IsGLFWInit)
@@ -50,14 +51,12 @@ namespace Velocity
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 		m_Window = glfwCreateWindow((int)m_Data.Width, (int)m_Data.Height, m_Data.Title.c_str(), nullptr, nullptr);
-		glfwMakeContextCurrent(m_Window);
-
-		int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
-		VL_CORE_ASSERT(status, "Failed to initialize Glad!");
+		
+		m_Context = new OpenGLContext(m_Window);
+		m_Context->Init();
 		
 		glfwSetWindowUserPointer(m_Window, &m_Data);
 		SetVSync(true);
-		glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
 
 		// set GLFW callbacks
 		glfwSetWindowSizeCallback(m_Window, [](GLFWwindow* window, int width, int height)
@@ -159,7 +158,7 @@ namespace Velocity
 	void Windows_Window::OnUpdate()
 	{
 		glfwPollEvents();
-		glfwSwapBuffers(m_Window);
+		m_Context->SwapBuffers();
 	}
 
 	void Windows_Window::SetVSync(bool enabled)
