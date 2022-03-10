@@ -21,34 +21,50 @@ namespace Velocity
 		m_ImGuiLayer = new ImGuiLayer();
 		PushOverlay(m_ImGuiLayer);
 
-		float verts[3 * 3] =
+		float verts[3 * 7] =
 		{
-			-0.5f, -0.5f, 0.0f,
-			 0.5f, -0.5f, 0.0f,
-			 0.0f,  0.5f, 0.0f,
+			-0.5f, -0.5f, 0.0f,	1.0f, 1.0f, 1.0f, 1.0f,
+			 0.5f, -0.5f, 0.0f,	1.0f, 1.0f, 1.0f, 1.0f,
+			 0.0f,  0.5f, 0.0f,	1.0f, 1.0f, 1.0f, 1.0f
 		};
 
 		uint32_t indices[3] = { 0, 1, 2 };
 		
-		// gen vertex data
-		glGenVertexArrays(1, &m_VertexArray);
-		glBindVertexArray(m_VertexArray);
+		m_VertexArray.reset(VertexArray::Create());
+		m_VertexArray->Bind();
 
-		m_VertexBuffer.reset(VertexBuffer::Create(verts, sizeof(verts)));
+		// generate buffers
+		std::shared_ptr<VertexBuffer> vertexBuffer;
+		std::shared_ptr<IndexBuffer> indexBuffer;
 
-		glEnableVertexAttribArray(0);
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), nullptr);
+		vertexBuffer.reset(VertexBuffer::Create(verts, sizeof(verts)));
 
-		m_IndexBuffer.reset(IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t)));
+		BufferLayout layout = {
+			{ShaderDataType::Float3, "aPos", false},
+			{ShaderDataType::Float4, "aColor", false}
+		};
+
+		vertexBuffer->SetLayout(layout);
+		m_VertexArray->AddVertexBuffer(vertexBuffer);
+
+		indexBuffer.reset(IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t)));
+		m_VertexArray->SetIndexBuffer(indexBuffer);
+
+		m_VertexArray->Unbind();
 
 		std::string vertexSrc = 
 			R"(
 			#version 460 core
 			layout (location = 0) in vec3 aPos;
+			layout (location = 1) in vec4 aColor;
+			
 			layout (location = 0) out vec3 vPos;
+			layout (location = 1) out vec4 vColor;
+			
 			void main()
 			{
 				vPos = aPos;
+				vColor = aColor;
 				gl_Position = vec4(vPos, 1.0f);
 			}
 			)";
@@ -57,11 +73,12 @@ namespace Velocity
 			R"(
 			#version 460 core
 			layout (location = 0) in vec3 vPos;
+			layout (location = 1) in vec4 vColor;
 			layout (location = 0) out vec4 fragColor;
 
 			void main()
 			{
-				fragColor = vec4(vPos * 0.5 + 0.5, 1.0f);
+				fragColor = vColor;
 			}
 			)";
 
@@ -79,8 +96,9 @@ namespace Velocity
 			glClear(GL_COLOR_BUFFER_BIT);
 			
 			m_Shader->Bind();
-			glBindVertexArray(m_VertexArray);
-			glDrawElements(GL_TRIANGLES, m_IndexBuffer->GetCount(), GL_UNSIGNED_INT, nullptr);
+			m_VertexArray->Bind();
+			glDrawElements(GL_TRIANGLES, m_VertexArray->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
+			m_VertexArray->Unbind();
 
 			// update all our layers
 			for (Layer* layer : m_LayerStack)
