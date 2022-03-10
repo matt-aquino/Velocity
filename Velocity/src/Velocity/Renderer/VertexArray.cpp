@@ -8,9 +8,9 @@ namespace Velocity
 	VertexArray* VertexArray::Create()
 	{
 		switch (Renderer::GetAPI())
-		{
-		case RendererAPI::NONE: VL_CORE_ASSERT(false, "Unknown renderer API"); return nullptr;
-		case RendererAPI::OPENGL: return new OpenGLVertexArray();
+		{ 
+		case RendererAPI::API::NONE: VL_CORE_ASSERT(false, "Unknown renderer API"); return nullptr;
+		case RendererAPI::API::OPENGL: return new OpenGLVertexArray();
 		}
 
 		VL_CORE_ASSERT(false, "Unknown Renderer API");

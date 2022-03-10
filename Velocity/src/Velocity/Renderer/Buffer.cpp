@@ -9,16 +9,16 @@ namespace Velocity
 	{
 		switch (Renderer::GetAPI())
 		{
-			case RendererAPI::OPENGL:
+			case RendererAPI::API::OPENGL:
 				return new OpenGLVertexBuffer(vertices, size);
 
-			case RendererAPI::NONE:
+			case RendererAPI::API::NONE:
 				VL_CORE_ERROR("No API Selected!");
 				return nullptr;
 
-			case RendererAPI::DIRECTX:
-			case RendererAPI::VULKAN:
-			case RendererAPI::METAL:
+			case RendererAPI::API::DIRECTX:
+			case RendererAPI::API::VULKAN:
+			case RendererAPI::API::METAL:
 				VL_CORE_ASSERT(false, "API currently not supported!");
 				return nullptr;
 		}
@@ -31,16 +31,16 @@ namespace Velocity
 	{
 		switch (Renderer::GetAPI())
 		{
-			case RendererAPI::OPENGL:
+			case RendererAPI::API::OPENGL:
 				return new OpenGLIndexBuffer(indices, count);
 
-			case RendererAPI::NONE:
+			case RendererAPI::API::NONE:
 				VL_CORE_ERROR("No API Selected!");
 				return nullptr;
 
-			case RendererAPI::DIRECTX:
-			case RendererAPI::VULKAN:
-			case RendererAPI::METAL:
+			case RendererAPI::API::DIRECTX:
+			case RendererAPI::API::VULKAN:
+			case RendererAPI::API::METAL:
 				VL_CORE_ASSERT(false, "API currently not supported!");
 				return nullptr;
 		}

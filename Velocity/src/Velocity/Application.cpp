@@ -1,9 +1,9 @@
 #include "vlpch.h"
 #include "Application.h"
-#include "glad/glad.h"
 
 #include "Input.h"
 #include "Velocity/KeyCodes.h"
+#include "Renderer/Renderer.h"
 
 namespace Velocity
 {
@@ -93,12 +93,16 @@ namespace Velocity
 	{
 		while (m_Running)
 		{
-			glClear(GL_COLOR_BUFFER_BIT);
-			
+			RenderCommand::SetClearColor(glm::vec4(0.1f, 0.1f, 0.1f, 1.0f));
+			RenderCommand::Clear();
+
+			Renderer::BeginScene();
+
 			m_Shader->Bind();
-			m_VertexArray->Bind();
-			glDrawElements(GL_TRIANGLES, m_VertexArray->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
-			m_VertexArray->Unbind();
+			Renderer::Submit(m_VertexArray);
+			
+			Renderer::EndScene();
+
 
 			// update all our layers
 			for (Layer* layer : m_LayerStack)
