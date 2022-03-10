@@ -24,28 +24,48 @@ namespace Velocity
 		float verts[3 * 3] =
 		{
 			-0.5f, -0.5f, 0.0f,
-			0.5f, -0.5f, 0.0f,
-			0.0f, 0.5f, 0.0f,
+			 0.5f, -0.5f, 0.0f,
+			 0.0f,  0.5f, 0.0f,
 		};
 
-		unsigned int indices[3] = { 0, 1, 2 };
+		uint32_t indices[3] = { 0, 1, 2 };
 		
-		// gen vertex buffer
+		// gen vertex data
 		glGenVertexArrays(1, &m_VertexArray);
 		glBindVertexArray(m_VertexArray);
-		glGenBuffers(1, &m_VertexBuffer);
-		glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
 
-		glBufferData(GL_ARRAY_BUFFER, sizeof(verts), verts, GL_STATIC_DRAW);
+		m_VertexBuffer.reset(VertexBuffer::Create(verts, sizeof(verts)));
+
 		glEnableVertexAttribArray(0);
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), nullptr);
 
-		// gen index buffer
-		glGenBuffers(1, &m_IndexBuffer);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_IndexBuffer);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+		m_IndexBuffer.reset(IndexBuffer::Create(indices, sizeof(indices)));
 
+		std::string vertexSrc = 
+			R"(
+			#version 460 core
+			layout (location = 0) in vec3 aPos;
+			layout (location = 0) out vec3 vPos;
+			void main()
+			{
+				vPos = aPos;
+				gl_Position = vec4(vPos, 1.0f);
+			}
+			)";
 
+		std::string fragSrc=
+			R"(
+			#version 460 core
+			layout (location = 0) in vec3 vPos;
+			layout (location = 0) out vec4 fragColor;
+
+			void main()
+			{
+				fragColor = vec4(vPos * 0.5 + 0.5, 1.0f);
+			}
+			)";
+
+		m_Shader.reset(new Shader(vertexSrc, fragSrc));
 	}
 
 	Application::~Application()
@@ -57,19 +77,25 @@ namespace Velocity
 		while (m_Running)
 		{
 			glClear(GL_COLOR_BUFFER_BIT);
-
+			
+			m_Shader->Bind();
 			glBindVertexArray(m_VertexArray);
-			glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, nullptr);
+			glDrawElements(GL_TRIANGLES, m_IndexBuffer->GetCount(), GL_UNSIGNED_INT, nullptr);
 
+			// update all our layers
 			for (Layer* layer : m_LayerStack)
 				layer->OnUpdate();
 
 			if (Input::IsKeyPressed(VL_KEY_ESCAPE))
 				m_Running = false;
 
+			// begin rendering our ImGui overlay
 			m_ImGuiLayer->Begin();
+
+			// if any layers render to ImGui, render them
 			for (Layer* layer : m_LayerStack)
 				layer->OnImGuiRender();
+
 			m_ImGuiLayer->End();
 
 			m_Window->OnUpdate();

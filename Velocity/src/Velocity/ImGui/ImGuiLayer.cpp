@@ -5,6 +5,8 @@
 #include "backends/imgui_impl_opengl3.h"
 #include "backends/imgui_impl_glfw.h"
 
+#include <filesystem>
+
 // temp
 #include "Velocity/Application.h"
 #include <GLFW/glfw3.h>
@@ -35,6 +37,16 @@ namespace Velocity
 		ImGui::StyleColorsDark();
 		ImGuiStyle& style = ImGui::GetStyle();
 
+		// Load Fonts
+		io.Fonts->AddFontFromFileTTF("../Velocity/vendor/ImGui/misc/fonts/Cousine-Regular.ttf", 15.0f);
+		io.Fonts->AddFontFromFileTTF("../Velocity/vendor/ImGui/misc/fonts/DroidSans.ttf", 15.0f);
+		io.Fonts->AddFontFromFileTTF("../Velocity/vendor/ImGui/misc/fonts/ProggyClean.ttf", 15.0f);
+		io.Fonts->AddFontFromFileTTF("../Velocity/vendor/ImGui/misc/fonts/ProggyTiny.ttf", 15.0f);
+		io.Fonts->AddFontFromFileTTF("../Velocity/vendor/ImGui/misc/fonts/Roboto-Medium.ttf", 15.0f);
+
+		ImFont* font = io.Fonts->AddFontFromFileTTF("../Velocity/vendor/ImGui/misc/fonts/Karla-Regular.ttf", 15.0f);
+		IM_ASSERT(font != NULL);
+		
 		if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
 		{
 			style.WindowRounding = 0.0f;
@@ -44,7 +56,7 @@ namespace Velocity
 		Application& app = Application::Get();
 		GLFWwindow* window = static_cast<GLFWwindow*>(app.GetWindow().GetNativeWindow());
 		ImGui_ImplGlfw_InitForOpenGL(window, true);
-		ImGui_ImplOpenGL3_Init("#version 430");
+		ImGui_ImplOpenGL3_Init("#version 460 core");
 	}
 	
 	void ImGuiLayer::OnDetach()
@@ -85,10 +97,25 @@ namespace Velocity
 	void ImGuiLayer::OnImGuiRender()
 	{
 		static bool show = true;
+		static std::string gpu = (char*)glGetString(GL_RENDERER);
+		static std::string version = (char*)glGetString(GL_VERSION);
 
-		ImGui::Begin("Test Window");
-		ImGui::Button("Just a button!", ImVec2(70.0, 50.0));
-		ImGui::Checkbox("Toggle Demo Window", &show);
+		// change fonts
+		//ImGuiIO& io = ImGui::GetIO(); (void)io;
+		//ImFont& font = io.Fonts;
+
+		// render graphics information
+		ImGui::Begin("Renderer");
+
+		ImGui::Text("GPU: ");
+		ImGui::SameLine(0.0f, 1.0f);
+		ImGui::Text(gpu.c_str());
+
+		ImGui::NewLine();
+		ImGui::Text("OpenGL Version: ");
+		ImGui::SameLine(0.0f, 1.0f);
+		ImGui::Text(version.c_str());
+
 		ImGui::End();
 
 		if (show)
