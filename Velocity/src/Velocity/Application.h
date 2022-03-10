@@ -7,14 +7,8 @@
 #include "Window.h"
 #include "ImGui/ImGuiLayer.h"
 
-// temp
-#include "Platform/OpenGL/Shaders/Shader.h"
-#include "Renderer/Buffer.h"
-#include "Renderer/VertexArray.h"
-
 namespace Velocity
 {
-
 	class VELOCITY_API Application
 	{
 	public:
@@ -40,9 +34,6 @@ namespace Velocity
 
 		bool m_Running = true;
 		LayerStack m_LayerStack;
-
-		std::shared_ptr<Shader> m_Shader;
-		std::shared_ptr<VertexArray> m_VertexArray;
 
 		static Application* s_Instance;
 	};
