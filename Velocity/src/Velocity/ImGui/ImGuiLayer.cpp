@@ -94,7 +94,7 @@ namespace Velocity
 		}
 	}
 
-	void ImGuiLayer::OnImGuiRender()
+	void ImGuiLayer::OnImGuiRender(float deltaTime)
 	{
 		static bool show = true;
 		static std::string gpu = (char*)glGetString(GL_RENDERER);

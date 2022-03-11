@@ -4,6 +4,8 @@
 #include "Input.h"
 #include "KeyCodes.h"
 
+#include <GLFW/glfw3.h>
+
 namespace Velocity
 {
 #define BIND_EVENT_FUNC(x) std::bind(&Application::x, this, std::placeholders::_1)
@@ -29,19 +31,23 @@ namespace Velocity
 	{
 		while (m_Running)
 		{
+			float time = (float)glfwGetTime();
+			deltaTime = time - lastTime;
+			lastTime = time;
+
 			if (Input::IsKeyPressed(VL_KEY_ESCAPE))
 				m_Running = false;
 
 			// update all our layers
 			for (Velocity::Layer* layer : m_LayerStack)
-				layer->OnUpdate();
+				layer->OnUpdate(deltaTime);
 
 			// begin rendering our ImGui overlay
 			m_ImGuiLayer->Begin();
 
 			// if any layers render to ImGui, render them
 			for (Velocity::Layer* layer : m_LayerStack)
-				layer->OnImGuiRender();
+				layer->OnImGuiRender(deltaTime);
 
 			m_ImGuiLayer->End();
 

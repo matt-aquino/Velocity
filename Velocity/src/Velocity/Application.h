@@ -36,6 +36,9 @@ namespace Velocity
 		LayerStack m_LayerStack;
 
 		static Application* s_Instance;
+
+		float deltaTime = 0.0f;
+		float lastTime = 0.0f;
 	};
 
 

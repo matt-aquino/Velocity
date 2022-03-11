@@ -13,8 +13,8 @@ namespace Velocity
 
 		virtual void OnAttach() {}
 		virtual void OnDetach() {}
-		virtual void OnUpdate() {}
-		virtual void OnImGuiRender() {}
+		virtual void OnUpdate(float deltaTime) {}
+		virtual void OnImGuiRender(float deltaTime) {}
 		virtual void OnEvent(Event& event) {}
 
 		inline const std::string& GetName() const { return m_DebugName; }

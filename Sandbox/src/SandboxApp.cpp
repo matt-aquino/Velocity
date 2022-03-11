@@ -1,11 +1,16 @@
 #include <Velocity.h>
+#include "Velocity/Core.h"
+
 #include "ImGui/imgui.h"
+#include <cmath>
 
 class ExampleLayer : public Velocity::Layer
 {
 public:
-	ExampleLayer() : Layer("Example")
+	ExampleLayer() : Layer("Example"), m_Camera(-1.6f, 1.6f, -0.9f, 0.9f) // keep our 16:9 aspect ratio
 	{
+		m_CameraPosition = glm::vec3(0.0f);
+
 		Velocity::RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
 
 		float verts[3 * 7] =
@@ -48,11 +53,13 @@ public:
 			layout (location = 0) out vec3 vPos;
 			layout (location = 1) out vec4 vColor;
 			
+			uniform mat4 uViewProj;
+			
 			void main()
 			{
 				vPos = aPos;
 				vColor = aColor;
-				gl_Position = vec4(vPos, 1.0f);
+				gl_Position = uViewProj * vec4(vPos, 1.0f);
 			}
 			)";
 
@@ -72,36 +79,65 @@ public:
 		m_Shader.reset(new Velocity::Shader(vertexSrc, fragSrc));
 	}
 
-	void OnUpdate() override
+	void OnUpdate(float deltaTime) override
 	{
+		// update camera first
+		if (Velocity::Input::IsKeyPressed(VL_KEY_UP) || Velocity::Input::IsKeyPressed(VL_KEY_W))
+		{
+			m_CameraPosition += glm::vec3(0.0f, 1.0f, 0.0f) * m_CameraMoveSpeed * deltaTime;
+			m_Camera.SetPosition(m_CameraPosition);
+		}
+
+		if (Velocity::Input::IsKeyPressed(VL_KEY_DOWN) || Velocity::Input::IsKeyPressed(VL_KEY_S))
+		{
+			m_CameraPosition += glm::vec3(0.0f, -1.0f, 0.0f) * m_CameraMoveSpeed * deltaTime;
+			m_Camera.SetPosition(m_CameraPosition);
+		}
+
+		if (Velocity::Input::IsKeyPressed(VL_KEY_LEFT) || Velocity::Input::IsKeyPressed(VL_KEY_A))
+		{
+			m_CameraPosition += glm::vec3(-1.0f, 0.0f, 0.0f) * m_CameraMoveSpeed * deltaTime;
+			m_Camera.SetPosition(m_CameraPosition);
+		}
+
+		if (Velocity::Input::IsKeyPressed(VL_KEY_RIGHT) || Velocity::Input::IsKeyPressed(VL_KEY_D))
+		{
+			m_CameraPosition += glm::vec3(1.0f, 0.0f, 0.0f) * m_CameraMoveSpeed * deltaTime;
+			m_Camera.SetPosition(m_CameraPosition);
+		}
+
 		Velocity::RenderCommand::Clear();
 
-		Velocity::Renderer::BeginScene();
-		Velocity::Renderer::Submit(m_VertexArray);
+		Velocity::Renderer::BeginScene(m_Camera);
+
+		Velocity::Renderer::Submit(m_VertexArray, m_Shader);
+
 		Velocity::Renderer::EndScene();
 	}
 
-	virtual void OnImGuiRender() override
+	virtual void OnImGuiRender(float deltaTime) override
 	{
+		ImGui::Begin("Example Layer");
 
+		ImGui::SliderFloat("Camera Speed", &m_CameraMoveSpeed, 0.1f, 4.0f);
+
+		ImGui::End();
 	}
 
 	void OnEvent(Velocity::Event& event) override
 	{
 	}
 
-	bool OnKeyPressedEvent(Velocity::KeyPressedEvent& event)
-	{
-		if (event.GetKeyCode() == VL_KEY_ESCAPE)
-		{
-
-		}
-		return false;
-	}
-
 private:
 	std::shared_ptr<Velocity::Shader> m_Shader;
 	std::shared_ptr<Velocity::VertexArray> m_VertexArray;
+
+	// Camera
+	Velocity::OrthographicCamera m_Camera;
+	glm::vec3 m_CameraPosition;
+	float m_CameraMoveSpeed = 1.0f;
+	float m_CameraRotationSpeed = 180.0f;
+
 };
 
 class Sandbox : public Velocity::Application

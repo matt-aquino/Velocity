@@ -3,9 +3,11 @@
 
 namespace Velocity
 {
-	void Renderer::BeginScene()
-	{
+	Renderer::SceneData* Renderer::m_SceneData = new Renderer::SceneData;
 
+	void Renderer::BeginScene(OrthographicCamera& camera)
+	{
+		m_SceneData->ViewProjMatrix = camera.GetViewProjectionMatrix();
 	}
 
 	void Renderer::EndScene()
@@ -13,8 +15,11 @@ namespace Velocity
 
 	}
 
-	void Renderer::Submit(const std::shared_ptr<VertexArray>& vertexArray)
+	void Renderer::Submit(const std::shared_ptr<VertexArray>& vertexArray, const std::shared_ptr<Shader>& shader)
 	{
+		shader->Bind();
+		shader->UploadUniformMat4("uViewProj", m_SceneData->ViewProjMatrix);
+
 		vertexArray->Bind();
 		RenderCommand::DrawIndexed(vertexArray);
 	}
