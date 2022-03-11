@@ -83,28 +83,18 @@ public:
 	{
 		// update camera first
 		if (Velocity::Input::IsKeyPressed(VL_KEY_UP) || Velocity::Input::IsKeyPressed(VL_KEY_W))
-		{
-			m_CameraPosition += glm::vec3(0.0f, 1.0f, 0.0f) * m_CameraMoveSpeed * deltaTime;
-			m_Camera.SetPosition(m_CameraPosition);
-		}
+			m_CameraPosition.y += m_CameraMoveSpeed * deltaTime;
 
-		if (Velocity::Input::IsKeyPressed(VL_KEY_DOWN) || Velocity::Input::IsKeyPressed(VL_KEY_S))
-		{
-			m_CameraPosition += glm::vec3(0.0f, -1.0f, 0.0f) * m_CameraMoveSpeed * deltaTime;
-			m_Camera.SetPosition(m_CameraPosition);
-		}
+		else if (Velocity::Input::IsKeyPressed(VL_KEY_DOWN) || Velocity::Input::IsKeyPressed(VL_KEY_S))
+			m_CameraPosition.y -= m_CameraMoveSpeed * deltaTime;
 
 		if (Velocity::Input::IsKeyPressed(VL_KEY_LEFT) || Velocity::Input::IsKeyPressed(VL_KEY_A))
-		{
-			m_CameraPosition += glm::vec3(-1.0f, 0.0f, 0.0f) * m_CameraMoveSpeed * deltaTime;
-			m_Camera.SetPosition(m_CameraPosition);
-		}
+			m_CameraPosition.x -= m_CameraMoveSpeed * deltaTime;
 
-		if (Velocity::Input::IsKeyPressed(VL_KEY_RIGHT) || Velocity::Input::IsKeyPressed(VL_KEY_D))
-		{
-			m_CameraPosition += glm::vec3(1.0f, 0.0f, 0.0f) * m_CameraMoveSpeed * deltaTime;
-			m_Camera.SetPosition(m_CameraPosition);
-		}
+		else if (Velocity::Input::IsKeyPressed(VL_KEY_RIGHT) || Velocity::Input::IsKeyPressed(VL_KEY_D))
+			m_CameraPosition.x += m_CameraMoveSpeed * deltaTime;
+
+		m_Camera.SetPosition(m_CameraPosition);
 
 		Velocity::RenderCommand::Clear();
 
