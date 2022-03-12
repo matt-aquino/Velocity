@@ -1,5 +1,5 @@
 #pragma once
-#include "Velocity/Input.h"
+#include "Velocity/Input/Input.h"
 
 namespace Velocity
 {

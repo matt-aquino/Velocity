@@ -9,6 +9,11 @@ namespace Velocity
 	{
 		m_SceneData->ViewProjMatrix = camera.GetViewProjectionMatrix();
 	}
+	
+	void Renderer::BeginScene(PerspectiveCamera& camera)
+	{
+		m_SceneData->ViewProjMatrix = camera.GetViewProjectionMatrix();
+	}
 
 	void Renderer::EndScene()
 	{

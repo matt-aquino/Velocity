@@ -11,7 +11,7 @@
 #include <unordered_map>
 #include <unordered_set>
 
-#include "Velocity/Log.h"
+#include "Velocity/Core/Logging/Log.h"
 
 #ifdef VL_PLATFORM_WINDOWS
 	#include <Windows.h>

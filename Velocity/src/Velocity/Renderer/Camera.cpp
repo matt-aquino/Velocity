@@ -10,6 +10,8 @@
 
 namespace Velocity
 {
+	// =================  ORTHOGRAPHIC CAMERA  =================
+
 	OrthographicCamera::OrthographicCamera(float left, float right, float bottom, float top)
 		: m_ProjMatrix(glm::ortho(left, right, bottom, top, -1.0f, 1.0f)) 
 	{
@@ -23,7 +25,6 @@ namespace Velocity
 	{
 	}
 
-	// ORTHOGRAPHIC CAMERA
 	void OrthographicCamera::SetPosition(const glm::vec3& position)
 	{
 		m_Position = position;
@@ -42,8 +43,112 @@ namespace Velocity
 		m_ViewMatrix = glm::inverse(transform);
 		m_ViewProjMatrix = m_ProjMatrix * m_ViewMatrix;
 	}
+	
+	// =================  PERSPECTIVE CAMERA  =================
 
+	PerspectiveCamera::PerspectiveCamera(TransformComponent& transform)
+	{
+		m_Transform = transform;
+		m_ProjMatrix = glm::perspective(45.0f, 16.0f / 9.0f, 0.01f, 1000.0f);
+		m_ViewMatrix = glm::lookAt(m_Transform.GetPosition(), glm::vec3(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		m_ViewProjMatrix = m_ProjMatrix * m_ViewMatrix;
+	}
 
+	PerspectiveCamera::PerspectiveCamera(glm::vec3& position)
+	{
+		glm::vec3 rotation;
+		rotation.x = glm::cos(glm::radians(m_Yaw)) * glm::cos(glm::radians(m_Pitch));
+		rotation.y = glm::sin(glm::radians(m_Pitch));
+		rotation.z = glm::sin(glm::radians(m_Yaw)) * glm::cos(glm::radians(m_Pitch));
 
-	// PERSPECTIVE CAMERA
+		m_Transform = { position, rotation };
+		m_ProjMatrix = glm::perspective(45.0f, 16.0f / 9.0f, 0.01f, 1000.0f);
+		m_ViewMatrix = glm::lookAt(m_Transform.GetPosition(), glm::vec3(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		m_ViewProjMatrix = m_ProjMatrix * m_ViewMatrix;
+	}
+
+	PerspectiveCamera::~PerspectiveCamera()
+	{
+	}
+
+	void PerspectiveCamera::MoveCamera(CameraDirection direction, float deltaTime)
+	{
+		glm::vec3 moveDirection;
+		switch (direction)
+		{
+		case CameraDirection::FORWARD:
+			moveDirection = Front;
+			break;
+
+		case CameraDirection::BACKWARD:
+			moveDirection = -Front;
+			break;
+
+		case CameraDirection::LEFT:
+			moveDirection = -Right;
+			break;
+
+		case CameraDirection::RIGHT:
+			moveDirection = Right;
+			break;
+
+		case CameraDirection::UP:
+			moveDirection = Up;
+			break;
+
+		case CameraDirection::DOWN:
+			moveDirection = -Up;
+			break;
+		}
+
+		glm::vec3 position = GetPosition();
+		position += moveDirection * m_Speed * deltaTime;
+		SetPosition(position);
+	}
+
+	void PerspectiveCamera::SetCameraSpeed(float speed)
+	{
+		m_Speed = speed;
+	}
+
+	void PerspectiveCamera::SetPosition(const glm::vec3& position)
+	{
+		m_Transform.SetPosition(position);
+		RecalculateViewMatrix();
+	}
+
+	void PerspectiveCamera::AddCameraPitch(float pitch)
+	{
+		m_Pitch -= pitch;
+
+		if (m_Pitch < -89.0f)
+			m_Pitch = -89.0f;
+
+		if (m_Pitch > 89.0f)
+			m_Pitch = 89.0f;
+
+		RecalculateViewMatrix();
+	}
+
+	void PerspectiveCamera::AddCameraYaw(float yaw)
+	{
+		m_Yaw += yaw;
+		RecalculateViewMatrix();
+	}
+
+	void PerspectiveCamera::RecalculateViewMatrix()
+	{
+		glm::vec3 direction;
+		direction.x = glm::cos(glm::radians(m_Yaw)) * glm::cos(glm::radians(m_Pitch));
+		direction.y = glm::sin(glm::radians(m_Pitch));
+		direction.z = glm::sin(glm::radians(m_Yaw)) * glm::cos(glm::radians(m_Pitch));
+
+		Front = glm::normalize(direction);
+		Right = glm::normalize(glm::cross(Front, WorldUp));
+		Up = glm::normalize(glm::cross(Right, Front));
+
+		glm::vec3 position = m_Transform.GetPosition();
+		m_ViewMatrix = glm::lookAt(position, position + Front, Up);
+		m_ViewProjMatrix = m_ProjMatrix * m_ViewMatrix;
+	}
 }

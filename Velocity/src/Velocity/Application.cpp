@@ -1,8 +1,8 @@
 #include "vlpch.h"
 #include "Application.h"
 #include "Renderer/Renderer.h"
-#include "Input.h"
-#include "KeyCodes.h"
+#include "Input/Input.h"
+#include "Input/KeyCodes.h"
 
 #include <GLFW/glfw3.h>
 

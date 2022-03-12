@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Velocity/Core.h"
+#include "Velocity/Core/Core.h"
 
 namespace Velocity
 {

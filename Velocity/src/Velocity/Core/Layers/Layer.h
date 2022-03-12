@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Velocity/Core.h"
-#include "Events/Event.h"
+#include "Velocity/Core/Core.h"
+#include "Velocity/Events/Event.h"
 
 namespace Velocity
 {

@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Core.h"
-#include "LayerStack.h"
+#include "Core/Core.h"
+#include "Core/Layers/LayerStack.h"
 #include "Events/Event.h"
 #include "Events/AppEvent.h"
 #include "Window.h"

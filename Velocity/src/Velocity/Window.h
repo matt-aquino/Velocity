@@ -1,7 +1,7 @@
 #pragma once
 #include "vlpch.h"
 
-#include "Velocity/Core.h"
+#include "Velocity/Core/Core.h"
 #include "Velocity/Events/Event.h"
 
 struct GLFWwindow;

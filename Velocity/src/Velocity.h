@@ -3,16 +3,18 @@
 // FOR USE BY VELOCITY APPLICATIONS
 
 #include "Velocity/Application.h"
-#include "Velocity/Layer.h"
-#include "Velocity/Log.h"
+#include "Velocity/Core/Layers/Layer.h"
+#include "Velocity/Core/Logging/Log.h"
+#include "Velocity/Core/Components/CoreComponents.h"
+#include "entt.hpp"
 
 // ImGui
 #include "Velocity/ImGui/ImGuiLayer.h"
 
 // Input
-#include "Velocity/Input.h"
-#include "Velocity/KeyCodes.h"
-#include "Velocity/MouseButtonCodes.h"
+#include "Velocity/Input/Input.h"
+#include "Velocity/Input/KeyCodes.h"
+#include "Velocity/Input/MouseButtonCodes.h"
 
 // Events
 #include "Velocity/Events/Event.h"
@@ -26,4 +28,4 @@
 #include "Velocity/Renderer/Camera.h"
 
 // ENTRY POINT
-#include "Velocity/EntryPoint.h"
+#include "Velocity/Core/EntryPoint.h"
