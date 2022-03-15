@@ -33,10 +33,9 @@ namespace Velocity
 		{
 			MeshComponent comp = sceneRegistry.get<MeshComponent>(entity);
 			TransformComponent transform = sceneRegistry.get<TransformComponent>(entity);
-
+			
 			shader->UploadUniformMat4("uModelMat", transform);
 			RenderCommand::DrawIndexed(comp.m_Mesh.BindMesh());
-			
 			comp.m_Mesh.UnbindMesh();
 		}
 	}

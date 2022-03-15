@@ -144,4 +144,9 @@ namespace Velocity
 		CheckIfUniformCached(name);
 		glUniform1fv(m_UniformLocations[name], 1, &value);
 	}
+	void OpenGLShader::UploadUniformInt(const std::string& name, const int value)
+	{
+		CheckIfUniformCached(name);
+		glUniform1i(m_UniformLocations[name], value);
+	}
 }

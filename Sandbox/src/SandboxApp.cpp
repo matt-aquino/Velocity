@@ -347,13 +347,19 @@ public:
 				layout (location = 1) in vec2 vTexCoord;
 				layout (location = 0) out vec4 fragColor;
 
+				uniform sampler2D uTexture;
+
 				void main()
 				{
-					fragColor = vec4(vTexCoord, 0.0f, 1.0f);
+					fragColor = texture(uTexture, vTexCoord);
 				}
 				)";
 
 			m_TextureShader.reset(Velocity::Shader::Create(textureVertexSrc, textureFragSrc));
+			m_Texture = Velocity::Texture2D::Create("Assets/Textures/stonebrick.png");
+
+			m_TextureShader->Bind();
+			m_TextureShader->UploadUniformInt("uTexture", 0);
 		}
 	}
 
@@ -380,7 +386,7 @@ public:
 
 		// update camera rotation
 		
-		if (Velocity::Input::IsMouseButtonPressed(VL_MOUSE_BUTTON_LEFT) || Velocity::Input::IsMouseButtonPressed(VL_MOUSE_BUTTON_RIGHT))
+		if (Velocity::Input::IsMouseButtonPressed(VL_MOUSE_BUTTON_RIGHT))
 		{
 			auto [x, y] = Velocity::Input::GetMousePosition();
 
@@ -413,6 +419,7 @@ public:
 		Velocity::Renderer::BeginScene(m_Camera);
 
 		//Velocity::Renderer::Submit(m_Scene->GetRegistry(), m_FlatColorShader);
+		m_Texture->Bind();
 		Velocity::Renderer::Submit(m_Scene->GetRegistry(), m_TextureShader);
 
 		Velocity::Renderer::EndScene();
@@ -421,32 +428,32 @@ public:
 	virtual void OnImGuiRender(float deltaTime) override
 	{
 		ImGui::Begin("Perspective Camera");
+		{
+			ImGui::Text("Camera Position");
+			ImGui::Text(std::to_string(m_Camera.GetPosition().x).c_str());
+			ImGui::SameLine();
+			ImGui::Text(std::to_string(m_Camera.GetPosition().y).c_str());
+			ImGui::SameLine();
+			ImGui::Text(std::to_string(m_Camera.GetPosition().z).c_str());
 
-		ImGui::Text("Camera Position");
-		ImGui::Text(std::to_string(m_Camera.GetPosition().x).c_str());
-		ImGui::SameLine();
-		ImGui::Text(std::to_string(m_Camera.GetPosition().y).c_str());
-		ImGui::SameLine();
-		ImGui::Text(std::to_string(m_Camera.GetPosition().z).c_str());
+			ImGui::Text("Camera Rotation");
+			ImGui::Text("Pitch: ");
+			ImGui::SameLine();
+			ImGui::Text(std::to_string(m_Camera.GetPitch()).c_str(), "%.2f");
+			ImGui::SameLine();
+			ImGui::Text(" Yaw: ");
+			ImGui::SameLine();
+			ImGui::Text(std::to_string(m_Camera.GetYaw()).c_str(), "%.2f");
 
-		ImGui::Text("Camera Rotation");
-		ImGui::Text("Pitch: ");
-		ImGui::SameLine();
-		ImGui::Text(std::to_string(m_Camera.GetPitch()).c_str(), "%.2f");
-		ImGui::SameLine();
-		ImGui::Text(" Yaw: ");
-		ImGui::SameLine();
-		ImGui::Text(std::to_string(m_Camera.GetYaw()).c_str(), "%.2f");
+			float speed = m_Camera.GetCameraSpeed();
+			ImGui::SliderFloat("Camera Speed", &speed, 0.1f, 4.0f);
+			m_Camera.SetCameraSpeed(speed);
 
-		float speed = m_Camera.GetCameraSpeed();
-		ImGui::SliderFloat("Camera Speed", &speed, 0.1f, 4.0f);
-		m_Camera.SetCameraSpeed(speed);
-
-		float fov = m_Camera.GetFOV();
-		ImGui::Text("Camera FOV");
-		ImGui::SameLine();
-		ImGui::Text(std::to_string(m_Camera.GetFOV()).c_str(), "%.2f");
-
+			float fov = m_Camera.GetFOV();
+			ImGui::Text("Camera FOV");
+			ImGui::SameLine();
+			ImGui::Text(std::to_string(m_Camera.GetFOV()).c_str(), "%.2f");
+		}
 		ImGui::End();
 	}
 
@@ -467,6 +474,8 @@ public:
 
 	private:
 		Velocity::Ref<Velocity::Shader> m_FlatColorShader, m_TextureShader;
+		Velocity::Ref<Velocity::Texture2D> m_Texture;
+		
 		Velocity::Scope<Velocity::Scene> m_Scene;
 
 		Velocity::PerspectiveCamera m_Camera;

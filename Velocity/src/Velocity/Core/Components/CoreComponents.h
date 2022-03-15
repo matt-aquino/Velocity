@@ -20,23 +20,29 @@ namespace Velocity
 
 	struct TransformComponent
 	{
+		TransformComponent() { m_Transform = glm::mat4(1.0f); }
 		TransformComponent(glm::mat4& transform) : m_Transform(transform) {}
-
 		TransformComponent(const TransformComponent&) = default;
-		TransformComponent(glm::vec3& position = glm::vec3(0.0f), glm::vec3& eulerRotation = glm::vec3(0.0f), glm::vec3& scale = glm::vec3(1.0f))
+
+		TransformComponent(glm::vec3& position)
 		{
-			m_Transform = glm::translate(glm::mat4(1.0f), position) * glm::rotate(glm::mat4(1.0f), 0.0f, eulerRotation) * glm::scale(glm::mat4(1.0f), scale); // TRS transformation
+			m_Transform = glm::translate(glm::mat4(1.0f), position);		
 		}
 
 		// accessors
-		glm::vec3 GetPosition() { return glm::vec3(glm::column(m_Transform, 0)); }
+		glm::vec3 GetPosition() { return glm::vec3(m_Transform[3]); } // translation is the last column in the matrix
 		glm::vec3 GetRotation() { return glm::vec3(glm::column(m_Transform, 1)); }
-		glm::vec3 GetScale()	 { return glm::vec3(glm::column(m_Transform, 2)); }
+		glm::vec3 GetScale()	 
+		{ 
+			glm::vec3 scale = glm::vec3(m_Transform[0][0], m_Transform[1][1], m_Transform[2][2]); // scale sits on the diagonal of the matrix
+			return scale; 
+		}
 
 		// mutators
-		void SetPosition(const glm::vec3& position) { m_Transform[0] = glm::vec4(position, 1.0f); }
-		void SetRotation(const glm::vec3& rotation) { m_Transform[1] = glm::vec4(rotation, 1.0f); }
-		void SetScale(const glm::vec3& scale)		{ m_Transform[2] = glm::vec4(scale,	   1.0f); }
+		void SetPosition(const glm::vec3& position) { m_Transform[3] = glm::vec4(position, 1.0f); }
+		void SetRotation(const glm::vec3& rotation, float angle) { m_Transform = glm::rotate(m_Transform, angle, rotation); }
+		void SetScale(const glm::vec3& scale) { m_Transform = glm::scale(m_Transform, scale); }
+		//void SetScale(const glm::vec3& scale) { m_Transform = glm::scale(glm::mat4(1.0f), scale); }
 
 		// overload operators to use perform math on the TransformComponent itself
 		operator glm::mat4& () { return m_Transform; }

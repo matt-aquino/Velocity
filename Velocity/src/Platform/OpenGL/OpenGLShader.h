@@ -25,6 +25,7 @@ namespace Velocity
 		virtual void UploadUniformFloat3(const std::string& name, const glm::vec3& values) override;
 		virtual void UploadUniformFloat2(const std::string& name, const glm::vec2& values) override;
 		virtual void UploadUniformFloat(const std::string& name, const float value) override;
+		virtual void UploadUniformInt(const std::string& name, const int value) override;
 
 	private:
 		uint32_t m_RendererID;

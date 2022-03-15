@@ -56,14 +56,9 @@ namespace Velocity
 
 	PerspectiveCamera::PerspectiveCamera(glm::vec3& position)
 	{
-		glm::vec3 rotation;
-		rotation.x = glm::cos(glm::radians(m_Yaw)) * glm::cos(glm::radians(m_Pitch));
-		rotation.y = glm::sin(glm::radians(m_Pitch));
-		rotation.z = glm::sin(glm::radians(m_Yaw)) * glm::cos(glm::radians(m_Pitch));
-
-		m_Transform = { position, rotation };
+		m_Transform = { position };
 		m_ProjMatrix = glm::perspective(45.0f, 16.0f / 9.0f, 0.01f, 1000.0f);
-		m_ViewMatrix = glm::lookAt(m_Transform.GetPosition(), glm::vec3(0.0f), WorldUp);
+		m_ViewMatrix = glm::lookAt(position, glm::vec3(0.0f, 0.0f, -1.0f), WorldUp);
 		m_ViewProjMatrix = m_ProjMatrix * m_ViewMatrix;
 	}
 

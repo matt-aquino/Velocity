@@ -22,6 +22,9 @@ namespace Velocity
 		virtual void UploadUniformFloat2(const std::string& name, const glm::vec2& values) = 0;
 		virtual void UploadUniformFloat(const std::string& name, const float value) = 0;
 
+
+		virtual void UploadUniformInt(const std::string& name, const int value) = 0;
+
 		static Shader* Create(std::string& vertSrc, std::string& fragSrc);
 	};
 }
