@@ -63,7 +63,7 @@ namespace Velocity
 
 		m_Transform = { position, rotation };
 		m_ProjMatrix = glm::perspective(45.0f, 16.0f / 9.0f, 0.01f, 1000.0f);
-		m_ViewMatrix = glm::lookAt(m_Transform.GetPosition(), glm::vec3(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		m_ViewMatrix = glm::lookAt(m_Transform.GetPosition(), glm::vec3(0.0f), WorldUp);
 		m_ViewProjMatrix = m_ProjMatrix * m_ViewMatrix;
 	}
 
@@ -109,6 +109,13 @@ namespace Velocity
 	void PerspectiveCamera::SetCameraSpeed(float speed)
 	{
 		m_Speed = speed;
+	}
+	
+	void PerspectiveCamera::SetCameraFOV(float fov)
+	{
+		m_FOV = fov;
+		m_ProjMatrix = glm::perspective(m_FOV, 16.0f / 9.0f, 0.01f, 1000.0f);
+		m_ViewProjMatrix = m_ProjMatrix * m_ViewMatrix;
 	}
 
 	void PerspectiveCamera::SetPosition(const glm::vec3& position)

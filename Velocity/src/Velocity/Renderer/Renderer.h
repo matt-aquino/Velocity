@@ -12,7 +12,7 @@ namespace Velocity
 		static void BeginScene(OrthographicCamera& camera); // Get scene parameters
 		static void BeginScene(PerspectiveCamera& camera); // Get scene parameters
 		static void EndScene();
-		static void Submit(const std::shared_ptr<VertexArray>& vertexArray, const std::shared_ptr<Shader>& shader);
+		static void Submit(entt::registry& sceneRegistry, const std::shared_ptr<Shader>& shader);
 
 		inline static RendererAPI::API GetAPI() { return RendererAPI::GetAPI(); }
 

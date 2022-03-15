@@ -27,12 +27,12 @@ namespace Velocity
 		return nullptr;
 	}
 
-	IndexBuffer* IndexBuffer::Create(uint32_t* indices, uint32_t count)
+	IndexBuffer* IndexBuffer::Create(uint32_t* indices, uint32_t size)
 	{
 		switch (Renderer::GetAPI())
 		{
 			case RendererAPI::API::OPENGL:
-				return new OpenGLIndexBuffer(indices, count);
+				return new OpenGLIndexBuffer(indices, size);
 
 			case RendererAPI::API::NONE:
 				VL_CORE_ERROR("No API Selected!");

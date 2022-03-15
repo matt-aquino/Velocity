@@ -1,6 +1,8 @@
 #pragma once 
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
+#include "glm/gtc/matrix_access.hpp"
+
 #include <string>
 
 namespace Velocity
@@ -23,13 +25,13 @@ namespace Velocity
 		TransformComponent(const TransformComponent&) = default;
 		TransformComponent(glm::vec3& position = glm::vec3(0.0f), glm::vec3& eulerRotation = glm::vec3(0.0f), glm::vec3& scale = glm::vec3(1.0f))
 		{
-			m_Transform = glm::translate(glm::mat4(1.0f), position) * glm::rotate(glm::mat4(1.0f), 0.0f, eulerRotation) * glm::scale(glm::mat4(1.0f), scale);
+			m_Transform = glm::translate(glm::mat4(1.0f), position) * glm::rotate(glm::mat4(1.0f), 0.0f, eulerRotation) * glm::scale(glm::mat4(1.0f), scale); // TRS transformation
 		}
 
 		// accessors
-		glm::vec3& GetPosition() { return glm::vec3(m_Transform[0]); }
-		glm::vec3& GetRotation() { return glm::vec3(m_Transform[1]); }
-		glm::vec3& GetScale()	 { return glm::vec3(m_Transform[2]); }
+		glm::vec3 GetPosition() { return glm::vec3(glm::column(m_Transform, 0)); }
+		glm::vec3 GetRotation() { return glm::vec3(glm::column(m_Transform, 1)); }
+		glm::vec3 GetScale()	 { return glm::vec3(glm::column(m_Transform, 2)); }
 
 		// mutators
 		void SetPosition(const glm::vec3& position) { m_Transform[0] = glm::vec4(position, 1.0f); }
@@ -52,18 +54,5 @@ namespace Velocity
 		virtual void UpdateTransform() = 0;
 
 		TransformComponent m_Transform;
-	};
-
-	struct CameraComponent
-	{
-		enum class CameraType
-		{
-			Perspective = 0,
-			Orthographic = 1,
-			Isometric = 2
-		};
-
-		CameraComponent(CameraType type = CameraType::Perspective);
-
 	};
 }

@@ -10,12 +10,13 @@ namespace Velocity
 
 	Scene::~Scene()
 	{
+		for (GameObject* obj : m_SceneObjects)
+			delete obj;
 	}
 
-	GameObject Scene::CreateGameObject(std::string& name)
+	GameObject* Scene::CreateGameObject(std::string& name)
 	{
-		GameObject object = { name, m_Registry.create(), this };
-		return object;
+		return m_SceneObjects.emplace_back(new GameObject(name, this));
 	}
 
 	void Scene::OnUpdate(float deltaTime)

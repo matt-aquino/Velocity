@@ -1,5 +1,7 @@
 #include "vlpch.h"
 #include "Renderer.h"
+#include "entt.hpp"
+#include "Velocity/Core/Components/Components3D.h"
 
 namespace Velocity
 {
@@ -20,12 +22,22 @@ namespace Velocity
 
 	}
 
-	void Renderer::Submit(const std::shared_ptr<VertexArray>& vertexArray, const std::shared_ptr<Shader>& shader)
+	void Renderer::Submit(entt::registry& sceneRegistry, const std::shared_ptr<Shader>& shader)
 	{
 		shader->Bind();
 		shader->UploadUniformMat4("uViewProj", m_SceneData->ViewProjMatrix);
 
-		vertexArray->Bind();
-		RenderCommand::DrawIndexed(vertexArray);
+		auto view = sceneRegistry.view<MeshComponent>();
+
+		for (entt::entity entity : view)
+		{
+			MeshComponent comp = sceneRegistry.get<MeshComponent>(entity);
+			TransformComponent transform = sceneRegistry.get<TransformComponent>(entity);
+
+			shader->UploadUniformMat4("uModelMat", transform);
+			RenderCommand::DrawIndexed(comp.m_Mesh.BindMesh());
+			
+			comp.m_Mesh.UnbindMesh();
+		}
 	}
 }

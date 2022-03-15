@@ -13,6 +13,7 @@ namespace Velocity
 		virtual void Bind() const override;
 		virtual void Unbind() const override;
 
+		virtual bool HasLayout() override { return m_Layout.HasElements(); }
 		virtual void SetLayout(const BufferLayout& layout) override { m_Layout = layout; }
 		virtual const BufferLayout& GetLayout() const override { return m_Layout; }
 	
@@ -24,7 +25,7 @@ namespace Velocity
 	class OpenGLIndexBuffer : public IndexBuffer
 	{
 	public:
-		OpenGLIndexBuffer(uint32_t* indices, uint32_t count);
+		OpenGLIndexBuffer(uint32_t* indices, uint32_t size);
 		virtual ~OpenGLIndexBuffer();
 
 		virtual void Bind() const override;

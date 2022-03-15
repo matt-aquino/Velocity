@@ -27,12 +27,12 @@ namespace Velocity
 	}
 
 	// INDEX BUFFER
-	OpenGLIndexBuffer::OpenGLIndexBuffer(uint32_t* indices, uint32_t count)
+	OpenGLIndexBuffer::OpenGLIndexBuffer(uint32_t* indices, uint32_t size)
 	{
-		m_Count = count;
+		m_Count = size / sizeof(uint32_t); // size is in bytes, but we want to save number of indices only, so divide by sizeof(uint32_t) to get count
 		glCreateBuffers(1, &m_RendererID);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_RendererID);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_Count * sizeof(uint32_t), indices, GL_STATIC_DRAW);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, size, indices, GL_STATIC_DRAW); // here, we want to tell the GPU index buffer has size bytes
 	}
 
 	OpenGLIndexBuffer::~OpenGLIndexBuffer()

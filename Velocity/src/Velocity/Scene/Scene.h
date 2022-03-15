@@ -11,12 +11,16 @@ namespace Velocity
 	{
 	public:
 		Scene();
+
 		~Scene();
 
-		GameObject CreateGameObject(std::string& name);
+		GameObject* CreateGameObject(std::string& name);
 		void OnUpdate(float deltaTime);
+
+		inline entt::registry& GetRegistry() { return m_Registry; }
 
 	private:
 		entt::registry m_Registry;
+		std::vector<GameObject*> m_SceneObjects;
 	};
 }

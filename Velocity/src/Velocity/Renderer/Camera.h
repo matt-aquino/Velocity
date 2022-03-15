@@ -50,14 +50,16 @@ namespace Velocity
 		// mutators
 		void MoveCamera(CameraDirection direction, float deltaTime);
 		void SetCameraSpeed(float speed);
+		void SetCameraFOV(float fov);
 		void AddCameraPitch(float pitch);
 		void AddCameraYaw(float yaw);
 
 		// accessors
-		inline const glm::vec3& GetPosition() { return m_Transform.GetPosition(); }
+		inline const glm::vec3 GetPosition() { return m_Transform.GetPosition(); }
 		inline const float GetYaw() { return m_Yaw; }
 		inline const float GetPitch() { return m_Pitch; }
 		inline const float GetCameraSpeed() { return m_Speed; }
+		inline const float GetFOV() { return m_FOV; }
 
 		inline const glm::mat4& GetProjectionMatrix() const { return m_ProjMatrix; }
 		inline const glm::mat4& GetViewMatrix() const { return m_ViewMatrix; }
@@ -70,6 +72,7 @@ namespace Velocity
 		glm::mat4 m_ProjMatrix, m_ViewMatrix, m_ViewProjMatrix;
 		float m_Pitch = 0.0f, m_Yaw = -90.0f;
 		float m_Speed = 1.0f;
+		float m_FOV = 45.0f;
 
 		TransformComponent m_Transform;
 
