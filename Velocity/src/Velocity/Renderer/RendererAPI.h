@@ -17,7 +17,7 @@ namespace Velocity
 			GLES = 5	 // mobile devices and older hardware
 		};
 
-
+		virtual void Init() = 0;
 		virtual void SetClearColor(const glm::vec4& color) = 0;
 		virtual void Clear() = 0;
 

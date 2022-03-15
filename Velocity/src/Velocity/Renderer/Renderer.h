@@ -8,7 +8,7 @@ namespace Velocity
 	class Renderer
 	{
 	public:
-
+		static void Init();
 		static void BeginScene(OrthographicCamera& camera); // Get scene parameters
 		static void BeginScene(PerspectiveCamera& camera); // Get scene parameters
 		static void EndScene();
