@@ -156,91 +156,205 @@ public:
 
 		Velocity::RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
 
-		
-		float cubeVertices[3 * 8] = // 8 vertices in a cube, 3 floats each vertex position
+		// flat color shapes
+		/*
 		{
-			-0.5f, 0.5f, 0.5f,	 
-			-0.5f, -0.5f, 0.5f, 
-			0.5f, -0.5f, 0.5f,	 
-			0.5f, 0.5f, 0.5f,	 
+			float flatColorCubeVertices[3 * 8] = // 8 vertices in a cube, 3 floats each vertex position
+			{
+				-0.5f, 0.5f, 0.5f,	 
+				-0.5f, -0.5f, 0.5f, 
+				0.5f, -0.5f, 0.5f,	 
+				0.5f, 0.5f, 0.5f,	 
 			
-			0.5f, 0.5f, -0.5f,	 
-			0.5f, -0.5f, -0.5f,	 
-			-0.5f, -0.5f, -0.5f,	 
-			-0.5f, 0.5f, -0.5f	 
+				0.5f, 0.5f, -0.5f,	 
+				0.5f, -0.5f, -0.5f,	 
+				-0.5f, -0.5f, -0.5f,	 
+				-0.5f, 0.5f, -0.5f	 
+			};
+
+			// 12 triangles, 3 verts each
+			uint32_t cubeIndices[3 * 12] = 
+			{
+				0, 1, 2, // front
+				0, 2, 3,
+				3, 2, 5, // right
+				3, 5, 4,
+				4, 5, 6, // back
+				4, 6, 7,
+				7, 6, 1, // left
+				7, 1, 0,
+				7, 0, 3, // top
+				7, 3, 4,
+				1, 6, 5, // bottom
+				1, 5, 2
+			};
+		
+			float planeVertices [3 * 4] =
+			{
+				1.5f,  0.5f, 0.0f,
+				1.5f, -0.5f, 0.0f,
+				2.5f, -0.5f, 0.0f,
+				2.5f,  0.5f, 0.0f
+			};
+
+			uint32_t planeIndices [3 * 2] =
+			{
+				0, 1, 2,
+				0, 2, 3
+			};
+
+			Velocity::GameObject* flatColorCube = m_Scene->CreateGameObject(std::string("Flat Color Cube"));
+			Velocity::Mesh flatColorCubeMesh(flatColorCubeVertices, 24, cubeIndices, 36);
+			flatColorCube->AddComponent<Velocity::MeshComponent>(flatColorCubeMesh);
+
+			Velocity::GameObject* plane = m_Scene->CreateGameObject(std::string("Plane"));
+			Velocity::Mesh planeMesh(planeVertices, 12, planeIndices, 6);
+			plane->AddComponent<Velocity::MeshComponent>(planeMesh);
+
+			// flat color shader
+			std::string flatColorVertexSrc =
+				R"(
+				#version 460 core
+				layout (location = 0) in vec3 aPos;
+
+				layout (location = 0) out vec3 vPos;
+				layout (location = 1) out vec4 vColor;
+
+				uniform mat4 uViewProj;
+				uniform mat4 uModelMat;
+
+				void main()
+				{
+					vPos = aPos;
+					vColor = vec4(vPos, 1.0f);
+					gl_Position = uViewProj * uModelMat * vec4(vPos, 1.0f);
+				}
+				)";
+
+			std::string flatColorFragSrc =
+				R"(
+				#version 460 core
+				layout (location = 0) in vec3 vPos;
+				layout (location = 1) in vec4 vColor;
+				layout (location = 0) out vec4 fragColor;
+
+				void main()
+				{
+					fragColor = vColor;
+				}
+				)";
+
+			m_FlatColorShader.reset(Velocity::Shader::Create(flatColorVertexSrc, flatColorFragSrc));
+		}
+		
+		*/
+
+		// some coords need to be duplicated because of differing texture coords
+		float texturedCubeVertices[5 * 24] = 
+		{
+		//  [	  position	   ] [tex coord]
+			-0.5f,  0.5f,  0.5f, 0.0f, 1.0f, // 0  // front face
+			-0.5f, -0.5f,  0.5f, 0.0f, 0.0f, // 1  
+			 0.5f, -0.5f,  0.5f, 1.0f, 0.0f, // 2  
+			 0.5f,  0.5f,  0.5f, 1.0f, 1.0f, // 3  
+
+			 0.5f,  0.5f, -0.5f, 0.0f, 1.0f, // 4  // back face
+			 0.5f, -0.5f, -0.5f, 0.0f, 0.0f, // 5  
+			-0.5f, -0.5f, -0.5f, 1.0f, 0.0f, // 6  
+			-0.5f,  0.5f, -0.5f, 1.0f, 1.0f, // 7  
+
+			-0.5f,  0.5f, -0.5f, 0.0f, 1.0f, // 8  // left face
+			-0.5f, -0.5f, -0.5f, 0.0f, 0.0f, // 9
+			-0.5f, -0.5f,  0.5f, 1.0f, 0.0f, // 10
+			-0.5f,  0.5f,  0.5f, 1.0f, 1.0f, // 11
+
+			 0.5f,  0.5f,  0.5f, 0.0f, 1.0f, // 12  // right face
+			 0.5f, -0.5f,  0.5f, 0.0f, 0.0f, // 13
+			 0.5f, -0.5f, -0.5f, 1.0f, 0.0f, // 14
+			 0.5f,  0.5f, -0.5f, 1.0f, 1.0f, // 15
+
+			-0.5f, 0.5f, -0.5f, 0.0f, 1.0f, // 16  // top face
+			-0.5f, 0.5f,  0.5f, 0.0f, 0.0f, // 17
+			 0.5f, 0.5f,  0.5f, 1.0f, 0.0f, // 18
+			 0.5f, 0.5f, -0.5f, 1.0f, 1.0f, // 19
+
+			-0.5f, -0.5f,  0.5f, 0.0f, 1.0f, // 20  // bottom face
+			-0.5f, -0.5f, -0.5f, 0.0f, 0.0f, // 21
+			 0.5f, -0.5f, -0.5f, 1.0f, 0.0f, // 22
+			 0.5f, -0.5f,  0.5f, 1.0f, 1.0f, // 23
 		};
 
-		uint32_t cubeIndices [3 * 12] = { // 12 triangles, 3 verts each
+		uint32_t texturedCubeIndices[3 * 12] =
+		{
 			0, 1, 2, // front
 			0, 2, 3,
-			3, 2, 5, // right
-			3, 5, 4,
 			4, 5, 6, // back
 			4, 6, 7,
-			7, 6, 1, // left
-			7, 1, 0,
-			7, 0, 3, // top
-			7, 3, 4,
-			1, 6, 5, // bottom
-			1, 5, 2
+			8, 9, 10, // left
+			8, 10, 11,
+			12, 13, 14, // right
+			12, 14, 15,
+			16, 17, 18, // top
+			16, 18, 19,
+			20, 21, 22, // bottom
+			20, 22, 23,
 		};
-		
-		float planeVertices [3 * 4] =
+
+		Velocity::GameObject* texturedCube = m_Scene->CreateGameObject(std::string("Textured Cube"));
+
+		Velocity::Ref<Velocity::VertexBuffer> textureVB;
+		Velocity::Ref<Velocity::IndexBuffer> textureIB;
+
+		Velocity::BufferLayout textureLayout = {
+			{Velocity::ShaderDataType::Float3, "aPos", false},
+			{Velocity::ShaderDataType::Float2, "aTexCoord", false},
+		};
+
+		textureVB.reset(Velocity::VertexBuffer::Create(texturedCubeVertices, 5 * 24 * sizeof(float)));
+		textureVB->SetLayout(textureLayout);
+
+		textureIB.reset(Velocity::IndexBuffer::Create(texturedCubeIndices, 3 * 12 * sizeof(uint32_t)));
+
+		Velocity::Mesh texturedCubeMesh(textureVB, textureIB);
+		texturedCube->AddComponent<Velocity::MeshComponent>(texturedCubeMesh);
+
+		// texture shader
 		{
-			1.5f,  0.5f, 0.0f,
-			1.5f, -0.5f, 0.0f,
-			2.5f, -0.5f, 0.0f,
-			2.5f,  0.5f, 0.0f
-		};
+			std::string textureVertexSrc =
+				R"(
+				#version 460 core
+				layout (location = 0) in vec3 aPos;
+				layout (location = 1) in vec2 aTexCoord;
 
-		uint32_t planeIndices [3 * 2] =
-		{
-			0, 1, 2,
-			0, 2, 3
-		};
+				layout (location = 0) out vec3 vPos;
+				layout (location = 1) out vec2 vTexCoord;
 
-		Velocity::GameObject* cube = m_Scene->CreateGameObject(std::string("Cube"));
-		Velocity::Mesh cubeMesh(cubeVertices, 24, cubeIndices, 36);
-		cube->AddComponent<Velocity::MeshComponent>(cubeMesh);
+				uniform mat4 uViewProj;
+				uniform mat4 uModelMat;
 
-		Velocity::GameObject* plane = m_Scene->CreateGameObject(std::string("Plane"));
-		Velocity::Mesh planeMesh(planeVertices, 12, planeIndices, 6);
-		plane->AddComponent<Velocity::MeshComponent>(planeMesh);
+				void main()
+				{
+					vPos = aPos;
+					vTexCoord = aTexCoord;
+					gl_Position = uViewProj * uModelMat * vec4(vPos, 1.0f);
+				}
+				)";
 
-		std::string vertexSrc =
-			R"(
-			#version 460 core
-			layout (location = 0) in vec3 aPos;
+			std::string textureFragSrc =
+				R"(
+				#version 460 core
+				layout (location = 0) in vec3 vPos;
+				layout (location = 1) in vec2 vTexCoord;
+				layout (location = 0) out vec4 fragColor;
 
-			layout (location = 0) out vec3 vPos;
-			layout (location = 1) out vec4 vColor;
+				void main()
+				{
+					fragColor = vec4(vTexCoord, 0.0f, 1.0f);
+				}
+				)";
 
-			uniform mat4 uViewProj;
-			uniform mat4 uModelMat;
-
-			void main()
-			{
-				vPos = aPos;
-				vColor = vec4(vPos, 1.0f);
-				gl_Position = uViewProj * uModelMat * vec4(vPos, 1.0f);
-				//gl_Position = uViewProj * vec4(vPos, 1.0f);
-			}
-			)";
-
-		std::string fragSrc =
-			R"(
-			#version 460 core
-			layout (location = 0) in vec3 vPos;
-			layout (location = 1) in vec4 vColor;
-			layout (location = 0) out vec4 fragColor;
-
-			void main()
-			{
-				fragColor = vColor;
-			}
-			)";
-
-		m_Shader.reset(Velocity::Shader::Create(vertexSrc, fragSrc));
+			m_TextureShader.reset(Velocity::Shader::Create(textureVertexSrc, textureFragSrc));
+		}
 	}
 
 	void OnUpdate(float deltaTime) override
@@ -298,7 +412,8 @@ public:
 
 		Velocity::Renderer::BeginScene(m_Camera);
 
-		Velocity::Renderer::Submit(m_Scene->GetRegistry(), m_Shader);
+		//Velocity::Renderer::Submit(m_Scene->GetRegistry(), m_FlatColorShader);
+		Velocity::Renderer::Submit(m_Scene->GetRegistry(), m_TextureShader);
 
 		Velocity::Renderer::EndScene();
 	}
@@ -351,7 +466,7 @@ public:
 	}
 
 	private:
-		Velocity::Ref<Velocity::Shader> m_Shader;
+		Velocity::Ref<Velocity::Shader> m_FlatColorShader, m_TextureShader;
 		Velocity::Scope<Velocity::Scene> m_Scene;
 
 		Velocity::PerspectiveCamera m_Camera;

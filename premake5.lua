@@ -12,6 +12,7 @@ IncludeDir["GLAD"] = "Velocity/vendor/glad/include"
 IncludeDir["ImGui"] = "Velocity/vendor/ImGui"
 IncludeDir["glm"] = "Velocity/vendor/glm"
 IncludeDir["entt"] = "Velocity/vendor/entt/include"
+IncludeDir["stb_image"] = "Velocity/vendor/stb_image"
 include "Velocity/vendor/GLFW"
 include "Velocity/vendor/GLAD"
 include "Velocity/vendor/ImGui"
@@ -46,7 +47,8 @@ project "Velocity"
 		"%{IncludeDir.GLAD}",
 		"%{IncludeDir.ImGui}",
 		"%{IncludeDir.glm}",
-		"%{IncludeDir.entt}"
+		"%{IncludeDir.entt}",
+		"%{IncludeDir.stb_image}",
 	}
 	
 	links
@@ -107,7 +109,8 @@ project "Sandbox"
 		"Velocity/src",
 		"Velocity/vendor",
 		"%{IncludeDir.glm}",
-		"%{IncludeDir.entt}"
+		"%{IncludeDir.entt}",
+		"%{IncludeDir.stb_image}",
 	}
 	
 	links{ "Velocity" }
