@@ -1,7 +1,7 @@
 #pragma once
 #include "RenderCommand.h"
 #include "Camera.h"
-#include "Platform/OpenGL/Shaders/Shader.h"
+#include "Shader.h"
 
 namespace Velocity
 {
@@ -12,7 +12,7 @@ namespace Velocity
 		static void BeginScene(OrthographicCamera& camera); // Get scene parameters
 		static void BeginScene(PerspectiveCamera& camera); // Get scene parameters
 		static void EndScene();
-		static void Submit(entt::registry& sceneRegistry, const std::shared_ptr<Shader>& shader);
+		static void Submit(entt::registry& sceneRegistry, const Ref<Shader>& shader);
 
 		inline static RendererAPI::API GetAPI() { return RendererAPI::GetAPI(); }
 

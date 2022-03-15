@@ -24,7 +24,7 @@
 #include "Velocity/Renderer/RenderCommand.h"
 #include "Velocity/Renderer/Buffer.h"
 #include "Velocity/Renderer/VertexArray.h"
-#include "Platform/OpenGL/Shaders/Shader.h"
+#include "Velocity/Renderer/Shader.h"
 #include "Velocity/Renderer/Camera.h"
 
 // ENTRY POINT

@@ -35,8 +35,8 @@ public:
 		m_VertexArray->Bind();
 
 		// generate buffers
-		std::shared_ptr<Velocity::VertexBuffer> vertexBuffer;
-		std::shared_ptr<Velocity::IndexBuffer> indexBuffer;
+		Velocity::Ref<Velocity::VertexBuffer> vertexBuffer;
+		Velocity::Ref<Velocity::IndexBuffer> indexBuffer;
 
 		vertexBuffer.reset(Velocity::VertexBuffer::Create(verts, sizeof(verts)));
 
@@ -134,8 +134,8 @@ public:
 	}
 
 private:
-	std::shared_ptr<Velocity::Shader> m_Shader;
-	std::shared_ptr<Velocity::VertexArray> m_VertexArray;
+	Velocity::Ref<Velocity::Shader> m_Shader;
+	Velocity::Ref<Velocity::VertexArray> m_VertexArray;
 
 	// Camera
 	Velocity::OrthographicCamera m_Camera;
@@ -189,8 +189,8 @@ public:
 		{
 			1.5f,  0.5f, 0.0f,
 			1.5f, -0.5f, 0.0f,
-			2.0f, -0.5f, 0.0f,
-			2.0f,  0.5f, 0.0f
+			2.5f, -0.5f, 0.0f,
+			2.5f,  0.5f, 0.0f
 		};
 
 		uint32_t planeIndices [3 * 2] =
@@ -240,7 +240,7 @@ public:
 			}
 			)";
 
-		m_Shader.reset(new Velocity::Shader(vertexSrc, fragSrc));
+		m_Shader.reset(Velocity::Shader::Create(vertexSrc, fragSrc));
 	}
 
 	void OnUpdate(float deltaTime) override
@@ -351,9 +351,8 @@ public:
 	}
 
 	private:
-		std::shared_ptr<Velocity::Shader> m_Shader;
-
-		std::unique_ptr<Velocity::Scene> m_Scene;
+		Velocity::Ref<Velocity::Shader> m_Shader;
+		Velocity::Scope<Velocity::Scene> m_Scene;
 
 		Velocity::PerspectiveCamera m_Camera;
 		glm::vec3 m_CameraPosition;

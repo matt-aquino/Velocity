@@ -8,8 +8,8 @@ namespace Velocity
 		m_VertexArray.reset(VertexArray::Create());
 		m_VertexArray->Bind();
 
-		std::shared_ptr<VertexBuffer> vertexBuffer;
-		std::shared_ptr<IndexBuffer> indexBuffer;
+		Ref<VertexBuffer> vertexBuffer;
+		Ref<IndexBuffer> indexBuffer;
 
 		vertexBuffer.reset(VertexBuffer::Create(vertices, numVerts * sizeof(float)));
 		
@@ -27,7 +27,7 @@ namespace Velocity
 	}
 
 
-	Mesh::Mesh(std::shared_ptr<VertexBuffer>& vertexBuffer, std::shared_ptr<IndexBuffer>& indexBuffer)
+	Mesh::Mesh(Ref<VertexBuffer>& vertexBuffer, Ref<IndexBuffer>& indexBuffer)
 	{
 		m_VertexArray.reset(VertexArray::Create());
 		m_VertexArray->Bind();
@@ -48,7 +48,7 @@ namespace Velocity
 		m_VertexArray->Unbind();
 	}
 
-	std::shared_ptr<VertexArray>& Mesh::BindMesh()
+	Ref<VertexArray>& Mesh::BindMesh()
 	{
 		m_VertexArray->Bind();
 		return m_VertexArray;

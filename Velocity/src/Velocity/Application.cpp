@@ -16,7 +16,7 @@ namespace Velocity
 	{
 		VL_CORE_ASSERT(!s_Instance, "Application already exists!");
 		s_Instance = this;
-		m_Window = std::unique_ptr<Velocity::Window>(Velocity::Window::Create());
+		m_Window = Scope<Velocity::Window>(Velocity::Window::Create());
 		m_Window->SetEventCallback(BIND_EVENT_FUNC(OnEvent));
 
 		m_ImGuiLayer = new ImGuiLayer();

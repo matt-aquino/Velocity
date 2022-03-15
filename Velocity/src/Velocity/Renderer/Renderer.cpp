@@ -22,7 +22,7 @@ namespace Velocity
 
 	}
 
-	void Renderer::Submit(entt::registry& sceneRegistry, const std::shared_ptr<Shader>& shader)
+	void Renderer::Submit(entt::registry& sceneRegistry, const Ref<Shader>& shader)
 	{
 		shader->Bind();
 		shader->UploadUniformMat4("uViewProj", m_SceneData->ViewProjMatrix);

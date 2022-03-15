@@ -1,11 +1,10 @@
 #include "vlpch.h"
-#include "Shader.h"
-#include "glad/glad.h"
+#include "OpenGLShader.h"
 #include "glm/gtc/type_ptr.hpp"
 
 namespace Velocity
 {
-	Shader::Shader(const std::string& vertexSrc, const std::string& fragmentSrc)
+	OpenGLShader::OpenGLShader(const std::string& vertexSrc, const std::string& fragmentSrc)
 	{
 		// Create Vertex Shader
 		GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
@@ -84,23 +83,65 @@ namespace Velocity
 		glDetachShader(m_RendererID, fragmentShader);
 	}
 
-	Shader::~Shader()
+	OpenGLShader::~OpenGLShader()
 	{
 		glDeleteProgram(m_RendererID);
 	}
 
-	void Shader::Bind() const
+	void OpenGLShader::Bind() const
 	{
 		glUseProgram(m_RendererID);
 	}
 
-	void Shader::Unbind() const
+	void OpenGLShader::Unbind() const
 	{
 		glUseProgram(0);
 	}
-	void Shader::UploadUniformMat4(const std::string& name, const glm::mat4& matrix)
+
+	void OpenGLShader::CheckIfUniformCached(const std::string& name)
 	{
-		GLint location = glGetUniformLocation(m_RendererID, name.c_str()); 
-		glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(matrix));
+		if (m_UniformLocations.find(name) == m_UniformLocations.end())
+		{
+			GLint location = glGetUniformLocation(m_RendererID, name.c_str());
+			m_UniformLocations[name] = location;
+		}
+	}
+
+	// ====================== UNIFORMS ======================
+
+	void OpenGLShader::UploadUniformMat4(const std::string& name, const glm::mat4& matrix)
+	{
+		CheckIfUniformCached(name);
+		glUniformMatrix4fv(m_UniformLocations[name], 1, GL_FALSE, glm::value_ptr(matrix));
+	}
+
+	void OpenGLShader::UploadUniformMat3(const std::string& name, const glm::mat3& matrix)
+	{
+		CheckIfUniformCached(name);
+		glUniformMatrix3fv(m_UniformLocations[name], 1, GL_FALSE, glm::value_ptr(matrix));
+	}
+
+	void OpenGLShader::UploadUniformFloat4(const std::string& name, const glm::vec4& values)
+	{
+		CheckIfUniformCached(name);
+		glUniform4fv(m_UniformLocations[name], 1, glm::value_ptr(values));
+	}
+
+	void OpenGLShader::UploadUniformFloat3(const std::string& name, const glm::vec3& values)
+	{
+		CheckIfUniformCached(name);
+		glUniform3fv(m_UniformLocations[name], 1, glm::value_ptr(values));
+	}
+
+	void OpenGLShader::UploadUniformFloat2(const std::string& name, const glm::vec2& values)
+	{
+		CheckIfUniformCached(name);
+		glUniform2fv(m_UniformLocations[name], 1, glm::value_ptr(values));
+	}
+
+	void OpenGLShader::UploadUniformFloat(const std::string& name, const float value)
+	{
+		CheckIfUniformCached(name);
+		glUniform1fv(m_UniformLocations[name], 1, &value);
 	}
 }
