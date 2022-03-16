@@ -10,7 +10,20 @@ namespace Velocity
 	class OpenGLShader : public Shader
 	{
 	public:
+		/// <summary>
+		/// Create a shader program using 2 separate strings 
+		/// </summary>
+		/// <param name="vertSrc">string containing vertex shader code</param>
+		/// <param name="fragSrc">string containing fragment shader code</param>
+		/// <returns></returns>
 		OpenGLShader(const std::string& vertexSrc, const std::string& fragmentSrc);
+
+		/// <summary>
+		/// Create a shader program by passing in a .glsl file path
+		/// </summary>
+		/// <param name="path">the location of the .glsl file</param>
+		/// <returns></returns>
+		OpenGLShader(const std::string& path);
 		~OpenGLShader();
 
 		void Bind() const override;
@@ -28,6 +41,10 @@ namespace Velocity
 		virtual void UploadUniformInt(const std::string& name, const int value) override;
 
 	private:
+		std::string ReadFile(const std::string& file);
+		std::unordered_map<GLenum, std::string> Preprocess(const std::string& source);
+		void Compile(std::unordered_map<GLenum, std::string>& shaderSources);
+
 		uint32_t m_RendererID;
 		std::unordered_map<std::string, GLint> m_UniformLocations;
 	};

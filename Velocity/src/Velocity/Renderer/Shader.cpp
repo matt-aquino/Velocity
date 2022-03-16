@@ -27,4 +27,27 @@ namespace Velocity
 		VL_CORE_ASSERT(false, "Unknown Renderer API");
 		return nullptr;
 	}
+
+	
+	Shader* Shader::Create(const std::string& path)
+	{
+		switch (Renderer::GetAPI())
+		{
+		case RendererAPI::API::OPENGL:
+			return new OpenGLShader(path);
+
+		case RendererAPI::API::NONE:
+			VL_CORE_ERROR("No API Selected!");
+			return nullptr;
+
+		case RendererAPI::API::DIRECTX:
+		case RendererAPI::API::VULKAN:
+		case RendererAPI::API::METAL:
+			VL_CORE_ASSERT(false, "API currently not supported!");
+			return nullptr;
+		}
+
+		VL_CORE_ASSERT(false, "Unknown Renderer API");
+		return nullptr;
+	}
 }

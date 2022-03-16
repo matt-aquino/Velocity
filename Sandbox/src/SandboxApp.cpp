@@ -325,13 +325,10 @@ public:
 				#version 460 core
 				layout (location = 0) in vec3 aPos;
 				layout (location = 1) in vec2 aTexCoord;
-
 				layout (location = 0) out vec3 vPos;
 				layout (location = 1) out vec2 vTexCoord;
-
 				uniform mat4 uViewProj;
 				uniform mat4 uModelMat;
-
 				void main()
 				{
 					vPos = aPos;
@@ -346,16 +343,15 @@ public:
 				layout (location = 0) in vec3 vPos;
 				layout (location = 1) in vec2 vTexCoord;
 				layout (location = 0) out vec4 fragColor;
-
 				uniform sampler2D uTexture;
-
 				void main()
 				{
 					fragColor = texture(uTexture, vTexCoord);
 				}
 				)";
 
-			m_TextureShader.reset(Velocity::Shader::Create(textureVertexSrc, textureFragSrc));
+			//m_TextureShader.reset(Velocity::Shader::Create(textureVertexSrc, textureFragSrc));
+			m_TextureShader.reset(Velocity::Shader::Create("Assets/Shaders/texture.glsl"));
 			m_Texture = Velocity::Texture2D::Create("Assets/Textures/stonebrick.png");
 
 			m_TextureShader->Bind();

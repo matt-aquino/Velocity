@@ -26,5 +26,6 @@ namespace Velocity
 		virtual void UploadUniformInt(const std::string& name, const int value) = 0;
 
 		static Shader* Create(std::string& vertSrc, std::string& fragSrc);
+		static Shader* Create(const std::string& path);
 	};
 }
