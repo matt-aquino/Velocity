@@ -350,8 +350,8 @@ public:
 				}
 				)";
 
-			//m_TextureShader.reset(Velocity::Shader::Create(textureVertexSrc, textureFragSrc));
-			m_TextureShader.reset(Velocity::Shader::Create("Assets/Shaders/texture.glsl"));
+			//m_TextureShader = Velocity::Shader::Create("Texture", textureVertexSrc, textureFragSrc);
+			m_TextureShader = Velocity::Shader::Create("Assets/Shaders/texture.glsl");
 			m_Texture = Velocity::Texture2D::Create("Assets/Textures/stonebrick.png");
 
 			m_TextureShader->Bind();
@@ -457,15 +457,23 @@ public:
 	{
 		Velocity::EventDispatcher d(event);
 		d.Dispatch<Velocity::MouseScrollEvent>(VL_BIND_EVENT_FN(PerspectiveLayer::OnMouseScroll));
+		d.Dispatch<Velocity::WindowResizeEvent>(VL_BIND_EVENT_FN(PerspectiveLayer::OnWindowResize));
 	}
 
 	bool OnMouseScroll(Velocity::MouseScrollEvent& event)
 	{
 		float offset = event.GetYOffset();
 		float fov = m_Camera.GetFOV();
-		fov += offset * 0.1f; // scale down the zoom
+		fov += offset; // scale down the zoom
 		m_Camera.SetCameraFOV(fov);
 		return true;
+	}
+
+	bool OnWindowResize(Velocity::WindowResizeEvent& event)
+	{
+		uint32_t width = event.GetWidth(), height = event.GetHeight();
+		m_Camera.SetAspectRatio(width, height);
+		return false;
 	}
 
 	private:

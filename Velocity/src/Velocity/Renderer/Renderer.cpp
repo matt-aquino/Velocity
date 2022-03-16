@@ -12,6 +12,16 @@ namespace Velocity
 		RenderCommand::Init();
 	}
 
+	void Renderer::ResizeWindow(uint32_t width, uint32_t height)
+	{
+		RenderCommand::SetViewport(0, 0, width, height);
+	}
+
+	std::pair<uint32_t, uint32_t> Renderer::GetWindowSize()
+	{
+		return RenderCommand::GetWindowSize();
+	}
+
 	void Renderer::BeginScene(OrthographicCamera& camera)
 	{
 		m_SceneData->ViewProjMatrix = camera.GetViewProjectionMatrix();

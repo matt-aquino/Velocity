@@ -31,4 +31,17 @@ namespace Velocity
 		glDrawElements(GL_TRIANGLES, vertexArray->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
 	}
 
+	void OpenGLRendererAPI::SetViewport(uint32_t x, uint32_t y, uint32_t width, uint32_t height)
+	{
+		glViewport(x, y, width, height);
+	}
+
+	std::pair<uint32_t, uint32_t> OpenGLRendererAPI::GetViewport()
+	{
+		GLint viewport[4];
+		glGetIntegerv(GL_VIEWPORT, viewport);
+
+		return std::pair<uint32_t, uint32_t>(viewport[2], viewport[3]);
+	}
+
 }

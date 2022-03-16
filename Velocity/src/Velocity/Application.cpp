@@ -40,9 +40,12 @@ namespace Velocity
 			if (Input::IsKeyPressed(VL_KEY_ESCAPE))
 				m_Running = false;
 
-			// update all our layers
-			for (Velocity::Layer* layer : m_LayerStack)
-				layer->OnUpdate(deltaTime);
+			if (!m_AppMinimized)
+			{
+				// update all our layers
+				for (Velocity::Layer* layer : m_LayerStack)
+					layer->OnUpdate(deltaTime);
+			}
 
 			// begin rendering our ImGui overlay
 			m_ImGuiLayer->Begin();
@@ -62,11 +65,29 @@ namespace Velocity
 		m_Running = false;
 		return true;
 	}
+	
+	bool Application::OnWindowResize(WindowResizeEvent& e)
+	{
+		unsigned int width = e.GetWidth(), height = e.GetHeight();
+
+		if (width == 0 || height == 0)
+		{
+			m_AppMinimized = true;
+			return false;
+		}
+
+		m_AppMinimized = false;
+
+		Renderer::ResizeWindow(width, height);
+
+		return false;
+	}
 
 	void Application::OnEvent(Event & e)
 	{
 		EventDispatcher dispatcher(e);
 		dispatcher.Dispatch<WindowCloseEvent>(BIND_EVENT_FUNC(OnWindowClose));
+		dispatcher.Dispatch<WindowResizeEvent>(BIND_EVENT_FUNC(OnWindowResize));
 
 		for (auto it = m_LayerStack.end(); it != m_LayerStack.begin();)
 		{

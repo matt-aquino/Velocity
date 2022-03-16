@@ -1,6 +1,7 @@
 #include "vlpch.h"
 #include "Camera.h"
 #include "glm/gtc/matrix_transform.hpp"
+#include "Renderer.h"
 
 #define X_AXIS glm::vec3(1.0f, 0.0f, 0.0f)
 #define Y_AXIS glm::vec3(0.0f, 1.0f, 0.0f)
@@ -57,9 +58,10 @@ namespace Velocity
 	PerspectiveCamera::PerspectiveCamera(glm::vec3& position)
 	{
 		m_Transform = { position };
-		m_ProjMatrix = glm::perspective(45.0f, 16.0f / 9.0f, 0.01f, 1000.0f);
-		m_ViewMatrix = glm::lookAt(position, glm::vec3(0.0f, 0.0f, -1.0f), WorldUp);
-		m_ViewProjMatrix = m_ProjMatrix * m_ViewMatrix;
+		auto&[x, y] = Renderer::GetWindowSize();
+		m_AspectRatio = (float)x / (float)y;
+		m_ProjMatrix = glm::perspective(45.0f, m_AspectRatio, 0.01f, 1000.0f);
+		RecalculateViewMatrix();
 	}
 
 	PerspectiveCamera::~PerspectiveCamera()
@@ -109,7 +111,7 @@ namespace Velocity
 	void PerspectiveCamera::SetCameraFOV(float fov)
 	{
 		m_FOV = fov;
-		m_ProjMatrix = glm::perspective(m_FOV, 16.0f / 9.0f, 0.01f, 1000.0f);
+		m_ProjMatrix = glm::perspective(glm::radians(m_FOV), m_AspectRatio, 0.01f, 1000.0f);
 		m_ViewProjMatrix = m_ProjMatrix * m_ViewMatrix;
 	}
 
@@ -134,7 +136,14 @@ namespace Velocity
 
 	void PerspectiveCamera::AddCameraYaw(float yaw)
 	{
-		m_Yaw += yaw;
+		m_Yaw = glm::mod(m_Yaw + yaw, 360.0f); // keep values bound between 0 and 360 degrees
+		RecalculateViewMatrix();
+	}
+
+	void PerspectiveCamera::SetAspectRatio(uint32_t width, uint32_t height)
+	{
+		m_AspectRatio = (float)width / (float)height;
+		m_ProjMatrix = glm::perspective(glm::radians(m_FOV), m_AspectRatio, 0.01f, 1000.0f);
 		RecalculateViewMatrix();
 	}
 

@@ -9,6 +9,9 @@ namespace Velocity
 	{
 	public:
 		static void Init();
+		static void ResizeWindow(uint32_t width, uint32_t height);
+		static std::pair<uint32_t, uint32_t> GetWindowSize();
+
 		static void BeginScene(OrthographicCamera& camera); // Get scene parameters
 		static void BeginScene(PerspectiveCamera& camera); // Get scene parameters
 		static void EndScene();

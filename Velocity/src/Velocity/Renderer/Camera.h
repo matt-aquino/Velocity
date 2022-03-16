@@ -53,6 +53,7 @@ namespace Velocity
 		void SetCameraFOV(float fov);
 		void AddCameraPitch(float pitch);
 		void AddCameraYaw(float yaw);
+		void SetAspectRatio(uint32_t width, uint32_t height);
 
 		// accessors
 		inline const glm::vec3 GetPosition() { return m_Transform.GetPosition(); }
@@ -73,6 +74,7 @@ namespace Velocity
 		float m_Pitch = 0.0f, m_Yaw = -90.0f;
 		float m_Speed = 1.0f;
 		float m_FOV = 45.0f;
+		float m_AspectRatio = 0.0f;
 
 		TransformComponent m_Transform;
 

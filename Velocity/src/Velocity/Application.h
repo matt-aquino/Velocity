@@ -28,11 +28,13 @@ namespace Velocity
 
 	private:
 		bool OnWindowClose(WindowCloseEvent& e);
+		bool OnWindowResize(WindowResizeEvent& e);
 
 		Scope<Window> m_Window;
 		ImGuiLayer* m_ImGuiLayer;
 
 		bool m_Running = true;
+		bool m_AppMinimized = false;
 		LayerStack m_LayerStack;
 
 		static Application* s_Instance;

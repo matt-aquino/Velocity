@@ -14,7 +14,7 @@ namespace Velocity
 		/// <param name="vertSrc">string containing vertex shader code</param>
 		/// <param name="fragSrc">string containing fragment shader code</param>
 		/// <returns></returns>
-		OpenGLShader(const std::string& vertexSrc, const std::string& fragmentSrc);
+		OpenGLShader(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc);
 
 		/// <summary>
 		/// Create a shader program by passing in a .glsl file path
@@ -28,6 +28,7 @@ namespace Velocity
 		void Unbind() const override;
 
 		void CheckIfUniformCached(const std::string& name);
+		virtual const std::string& GetName() const override { return m_Name; }
 
 		// Uniform Upload functions
 		virtual void UploadUniformMat4(const std::string& name, const glm::mat4& matrix) override;
@@ -45,5 +46,6 @@ namespace Velocity
 
 		uint32_t m_RendererID;
 		std::unordered_map<std::string, GLint> m_UniformLocations;
+		std::string m_Name;
 	};
 }
