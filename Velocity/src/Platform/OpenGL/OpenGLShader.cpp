@@ -1,7 +1,6 @@
 #include "vlpch.h"
 #include "OpenGLShader.h"
 #include "glm/gtc/type_ptr.hpp"
-#include <fstream>
 
 namespace Velocity
 {
@@ -40,7 +39,7 @@ namespace Velocity
 
 	std::string OpenGLShader::ReadFile(const std::string& file)
 	{
-		std::ifstream in(file, std::ios::in, std::ios::binary);
+		std::ifstream in(file, std::ios::in | std::ios::binary);
 		std::string result;
 
 		if (in)
@@ -87,7 +86,10 @@ namespace Velocity
 	void OpenGLShader::Compile(std::unordered_map<GLenum, std::string>& shaderSources)
 	{
 		GLuint program = glCreateProgram();
-		std::vector<GLenum> shaderIDs(shaderSources.size());
+		VL_CORE_ASSERT(shaderSources.size() <= 2, "Max number of shaders exceeded");
+
+		std::array<GLenum, 2> shaderIDs;
+		int glShaderIDIndex = 0;
 
 		// compile all of our shaders
 		for (auto& kv : shaderSources)
@@ -118,7 +120,7 @@ namespace Velocity
 			}
 
 			glAttachShader(program, shader);
-			shaderIDs.push_back(shader);
+			shaderIDs[glShaderIDIndex++] = shader;
 		}		
 
 		glLinkProgram(program);
