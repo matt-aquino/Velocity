@@ -36,6 +36,22 @@ namespace Velocity
 			return s_RendererAPI->GetViewport();
 		}
 
+		inline static const char* GetGPU()
+		{
+			return s_RendererAPI->GetGPU();
+		}
+		
+		inline static std::pair<const char*, const char*> GetAPIVersion()
+		{
+			switch (s_RendererAPI->GetAPI())
+			{
+			case RendererAPI::API::OPENGL:
+				return { "OpenGL", s_RendererAPI->GetAPIVersion() };
+			}
+
+			return {"None", "N/A"};
+		}
+
 	private:
 		static RendererAPI* s_RendererAPI;
 	};

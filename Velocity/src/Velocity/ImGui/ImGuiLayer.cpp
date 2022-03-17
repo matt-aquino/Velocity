@@ -93,33 +93,4 @@ namespace Velocity
 			glfwMakeContextCurrent(backup_current_context);
 		}
 	}
-
-	void ImGuiLayer::OnImGuiRender(float deltaTime)
-	{
-		static bool show = true;
-		static std::string gpu = (char*)glGetString(GL_RENDERER);
-		static std::string version = (char*)glGetString(GL_VERSION);
-
-		// change fonts
-		//ImGuiIO& io = ImGui::GetIO(); (void)io;
-		//ImFont& font = io.Fonts;
-
-		// render graphics information
-		ImGui::Begin("Renderer");
-
-		ImGui::Text("GPU: ");
-		ImGui::SameLine(0.0f, 1.0f);
-		ImGui::Text(gpu.c_str());
-
-		ImGui::NewLine();
-		ImGui::Text("OpenGL Version: ");
-		ImGui::SameLine(0.0f, 1.0f);
-		ImGui::Text(version.c_str());
-
-		ImGui::End();
-
-		if (show)
-			ImGui::ShowDemoWindow(&show);
-	}
-
 }

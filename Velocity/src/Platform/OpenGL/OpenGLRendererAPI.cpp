@@ -44,4 +44,13 @@ namespace Velocity
 		return std::pair<uint32_t, uint32_t>(viewport[2], viewport[3]);
 	}
 
+	const char* OpenGLRendererAPI::GetGPU()
+	{
+		return (char*)glGetString(GL_RENDERER);
+	}
+	
+	const char* OpenGLRendererAPI::GetAPIVersion()
+	{
+		return (char*)glGetString(GL_VERSION);
+	}
 }

@@ -6,11 +6,14 @@
 #include "Velocity/Core/Components/CoreComponents.h"
 #include "Velocity/Core/Components/Components3D.h"
 
+#include "Velocity/Core/Timer.h"
+
 #include "ImGui/imgui.h"
 #include <cmath>
 #include "glm/gtc/type_ptr.hpp"
 #include <vector>
 #include <array>
+
 
 /*
 class OrthographicLayer : public Velocity::Layer
@@ -320,6 +323,7 @@ public:
 
 		// texture shader
 		{
+			/*
 			std::string textureVertexSrc =
 				R"(
 				#version 460 core
@@ -351,16 +355,23 @@ public:
 				)";
 
 			//m_TextureShader = Velocity::Shader::Create("Texture", textureVertexSrc, textureFragSrc);
+			*/
 			m_TextureShader = Velocity::Shader::Create("Assets/Shaders/texture.glsl");
 			m_Texture = Velocity::Texture2D::Create("Assets/Textures/stonebrick.png");
 
 			m_TextureShader->Bind();
 			m_TextureShader->UploadUniformInt("uTexture", 0);
 		}
+
+		// set up timers for profiling
+		m_Timers.insert({ "Update", Velocity::Timer() });
+		m_Timers.insert({ "Render", Velocity::Timer() });
 	}
 
 	void OnUpdate(float deltaTime) override
 	{
+		m_Timers["Update"].Begin();
+
 		// update camera movement
 		if (Velocity::Input::IsKeyPressed(VL_KEY_W))
 			m_Camera.MoveCamera(Velocity::PerspectiveCamera::CameraDirection::FORWARD, deltaTime);
@@ -409,16 +420,18 @@ public:
 		else
 			firstMouse = true;
 
+		m_Timers["Render"].Begin();
 
 		Velocity::RenderCommand::Clear();
-
 		Velocity::Renderer::BeginScene(m_Camera);
-
-		//Velocity::Renderer::Submit(m_Scene->GetRegistry(), m_FlatColorShader);
 		m_Texture->Bind();
 		Velocity::Renderer::Submit(m_Scene->GetRegistry(), m_TextureShader);
-
 		Velocity::Renderer::EndScene();
+
+		m_Timers["Render"].Stop();
+	
+
+		m_Timers["Update"].Stop();
 	}
 
 	virtual void OnImGuiRender(float deltaTime) override
@@ -434,11 +447,27 @@ public:
 			ImGui::Text("Pitch: %.2f   Yaw: %.2f", m_Camera.GetPitch(), m_Camera.GetYaw());
 
 			float speed = m_Camera.GetCameraSpeed();
+			ImGui::PushItemWidth(100.0f);
 			ImGui::SliderFloat("Camera Speed", &speed, 0.1f, 4.0f);
 			m_Camera.SetCameraSpeed(speed);
 
 			float fov = m_Camera.GetFOV();
 			ImGui::Text("Camera FOV: %.2f", m_Camera.GetFOV());
+		}
+		ImGui::End();
+
+		ImGui::Begin("Profiling", NULL, ImGuiWindowFlags_AlwaysAutoResize);
+		{
+			auto [api, version] = Velocity::RenderCommand::GetAPIVersion();
+
+			ImGui::Text("%s: %s", "GPU", Velocity::RenderCommand::GetGPU());
+			ImGui::Text("%s %s", api, version);
+
+			// FIX PROFILING
+			for (auto& timer : m_Timers)
+			{
+				ImGui::Text("%.3fms  %s", timer.second.GetDuration(), timer.first);
+			}
 		}
 		ImGui::End();
 	}
@@ -467,11 +496,15 @@ public:
 	}
 
 	private:
+		// Rendering
 		Velocity::Ref<Velocity::Shader> m_FlatColorShader, m_TextureShader;
 		Velocity::Ref<Velocity::Texture2D> m_Texture;
 		
-		Velocity::Scope<Velocity::Scene> m_Scene;
 
+		Velocity::Scope<Velocity::Scene> m_Scene;
+		std::unordered_map<const char*, Velocity::Timer> m_Timers;
+
+		// Camera
 		Velocity::PerspectiveCamera m_Camera;
 		glm::vec3 m_CameraPosition;
 		float m_CameraMoveSpeed = 1.0f;

@@ -14,7 +14,6 @@ namespace Velocity
 
 		virtual void OnAttach() override;
 		virtual void OnDetach() override;
-		virtual void OnImGuiRender(float deltaTime) override;
 
 		void Begin();
 		void End();
