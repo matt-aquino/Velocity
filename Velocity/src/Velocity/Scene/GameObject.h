@@ -7,7 +7,7 @@ namespace Velocity
 	class GameObject
 	{
 	public:
-		GameObject(std::string& name, Scene* scene)
+		GameObject(const std::string& name, Scene* scene)
 			: m_Name(name), m_Scene(scene)
 		{
 			m_EntityHandle = m_Scene->GetRegistry().create();

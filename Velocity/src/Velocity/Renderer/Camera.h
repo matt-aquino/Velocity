@@ -44,7 +44,7 @@ namespace Velocity
 		};
 
 		PerspectiveCamera(TransformComponent& transform);
-		PerspectiveCamera(glm::vec3& position = glm::vec3(0.0f));
+		PerspectiveCamera(const glm::vec3& position);
 		~PerspectiveCamera();
 
 		// mutators

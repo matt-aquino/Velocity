@@ -300,7 +300,7 @@ public:
 			20, 22, 23,
 		};
 
-		Velocity::GameObject* texturedCube = m_Scene->CreateGameObject(std::string("Textured Cube"));
+		Velocity::GameObject* texturedCube = m_Scene->CreateGameObject("Textured Cube");
 
 		Velocity::Ref<Velocity::VertexBuffer> textureVB;
 		Velocity::Ref<Velocity::IndexBuffer> textureIB;

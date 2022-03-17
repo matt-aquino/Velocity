@@ -21,10 +21,10 @@ namespace Velocity
 	struct TransformComponent
 	{
 		TransformComponent() { m_Transform = glm::mat4(1.0f); }
-		TransformComponent(glm::mat4& transform) : m_Transform(transform) {}
+		TransformComponent(const glm::mat4& transform) : m_Transform(transform) {}
 		TransformComponent(const TransformComponent&) = default;
 
-		TransformComponent(glm::vec3& position)
+		TransformComponent(const glm::vec3& position)
 		{
 			m_Transform = glm::translate(glm::mat4(1.0f), position);		
 		}

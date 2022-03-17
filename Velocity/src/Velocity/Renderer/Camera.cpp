@@ -55,10 +55,10 @@ namespace Velocity
 		m_ViewProjMatrix = m_ProjMatrix * m_ViewMatrix;
 	}
 
-	PerspectiveCamera::PerspectiveCamera(glm::vec3& position)
+	PerspectiveCamera::PerspectiveCamera(const glm::vec3& position)
 	{
 		m_Transform = { position };
-		auto&[x, y] = Renderer::GetWindowSize();
+		auto[x, y] = Renderer::GetWindowSize();
 		m_AspectRatio = (float)x / (float)y;
 		m_ProjMatrix = glm::perspective(45.0f, m_AspectRatio, 0.01f, 1000.0f);
 		RecalculateViewMatrix();

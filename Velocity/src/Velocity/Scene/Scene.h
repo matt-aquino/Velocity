@@ -14,7 +14,7 @@ namespace Velocity
 
 		~Scene();
 
-		GameObject* CreateGameObject(std::string& name);
+		GameObject* CreateGameObject(const std::string& name);
 		void OnUpdate(float deltaTime);
 
 		inline entt::registry& GetRegistry() { return m_Registry; }

@@ -14,7 +14,7 @@ namespace Velocity
 			delete obj;
 	}
 
-	GameObject* Scene::CreateGameObject(std::string& name)
+	GameObject* Scene::CreateGameObject(const std::string& name)
 	{
 		return m_SceneObjects.emplace_back(new GameObject(name, this));
 	}
