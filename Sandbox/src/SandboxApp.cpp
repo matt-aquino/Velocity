@@ -425,30 +425,20 @@ public:
 	{
 		ImGui::Begin("Perspective Camera");
 		{
+			glm::vec3 camPos = m_Camera.GetPosition();
+
 			ImGui::Text("Camera Position");
-			ImGui::Text(std::to_string(m_Camera.GetPosition().x).c_str());
-			ImGui::SameLine();
-			ImGui::Text(std::to_string(m_Camera.GetPosition().y).c_str());
-			ImGui::SameLine();
-			ImGui::Text(std::to_string(m_Camera.GetPosition().z).c_str());
+			ImGui::Text("%.2f   %.2f   %.2f", camPos.x, camPos.y, camPos.z);
 
 			ImGui::Text("Camera Rotation");
-			ImGui::Text("Pitch: ");
-			ImGui::SameLine();
-			ImGui::Text(std::to_string(m_Camera.GetPitch()).c_str(), "%.2f");
-			ImGui::SameLine();
-			ImGui::Text(" Yaw: ");
-			ImGui::SameLine();
-			ImGui::Text(std::to_string(m_Camera.GetYaw()).c_str(), "%.2f");
+			ImGui::Text("Pitch: %.2f   Yaw: %.2f", m_Camera.GetPitch(), m_Camera.GetYaw());
 
 			float speed = m_Camera.GetCameraSpeed();
 			ImGui::SliderFloat("Camera Speed", &speed, 0.1f, 4.0f);
 			m_Camera.SetCameraSpeed(speed);
 
 			float fov = m_Camera.GetFOV();
-			ImGui::Text("Camera FOV");
-			ImGui::SameLine();
-			ImGui::Text(std::to_string(m_Camera.GetFOV()).c_str(), "%.2f");
+			ImGui::Text("Camera FOV: %.2f", m_Camera.GetFOV());
 		}
 		ImGui::End();
 	}

@@ -111,6 +111,12 @@ namespace Velocity
 	void PerspectiveCamera::SetCameraFOV(float fov)
 	{
 		m_FOV = fov;
+		if (m_FOV < 30.0f)
+			m_FOV = 30.0f;
+
+		if (m_FOV > 120.0f)
+			m_FOV = 120.0f;
+
 		m_ProjMatrix = glm::perspective(glm::radians(m_FOV), m_AspectRatio, 0.01f, 1000.0f);
 		m_ViewProjMatrix = m_ProjMatrix * m_ViewMatrix;
 	}
