@@ -464,7 +464,7 @@ public:
 	{
 		float offset = event.GetYOffset();
 		float fov = m_Camera.GetFOV();
-		fov += offset; // scale down the zoom
+		fov += offset;
 		m_Camera.SetCameraFOV(fov);
 		return true;
 	}

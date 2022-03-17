@@ -1,5 +1,5 @@
 #pragma once
-#include "Velocity/Window.h"
+#include "Velocity/Core/Window.h"
 #include "Velocity/Renderer/GraphicsContext.h"
 
 #include <GLFW/glfw3.h>

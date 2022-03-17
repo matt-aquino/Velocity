@@ -1,6 +1,6 @@
 #include "vlpch.h"
 #include "WindowsInput.h"
-#include "Velocity/Application.h"
+#include "Velocity/Core/Application.h"
 
 #include <GLFW/glfw3.h>
 namespace Velocity

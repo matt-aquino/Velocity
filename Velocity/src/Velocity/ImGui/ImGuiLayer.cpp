@@ -8,7 +8,7 @@
 #include <filesystem>
 
 // temp
-#include "Velocity/Application.h"
+#include "Velocity/Core/Application.h"
 #include <GLFW/glfw3.h>
 #include <glad/glad.h>
 

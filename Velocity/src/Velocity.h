@@ -2,7 +2,7 @@
 
 // FOR USE BY VELOCITY APPLICATIONS
 
-#include "Velocity/Application.h"
+#include "Velocity/Core/Application.h"
 #include "Velocity/Core/Layers/Layer.h"
 #include "Velocity/Core/Logging/Log.h"
 #include "Velocity/Core/Components/CoreComponents.h"

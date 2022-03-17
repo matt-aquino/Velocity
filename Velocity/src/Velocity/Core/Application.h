@@ -1,11 +1,11 @@
 #pragma once
 
-#include "Core/Core.h"
-#include "Core/Layers/LayerStack.h"
-#include "Events/Event.h"
-#include "Events/AppEvent.h"
-#include "Window.h"
-#include "ImGui/ImGuiLayer.h"
+#include "Velocity/Core/Core.h"
+#include "Velocity/Core/Layers/LayerStack.h"
+#include "Velocity/Events/Event.h"
+#include "Velocity/Events/AppEvent.h"
+#include "Velocity/Core/Window.h"
+#include "Velocity/ImGui/ImGuiLayer.h"
 
 namespace Velocity
 {
