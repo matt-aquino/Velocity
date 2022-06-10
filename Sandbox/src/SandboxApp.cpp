@@ -1,3 +1,4 @@
+/*
 #include <Velocity.h>
 #include "Velocity/Core/Core.h"
 #include "Velocity/Scene/GameObject.h"
@@ -15,7 +16,6 @@
 #include <array>
 
 
-/*
 class OrthographicLayer : public Velocity::Layer
 {
 public:
@@ -147,12 +147,20 @@ private:
 	float m_CameraRotationSpeed = 180.0f;
 };
 
-*/
+
 class PerspectiveLayer : public Velocity::Layer
 {
 public:
 	PerspectiveLayer() : Layer("Perspective"), m_Camera(glm::vec3(0.0f, 0.0f, 5.0f))
 	{
+		Velocity::FramebufferSpecs fbSpec;
+		auto width = Velocity::Application::Get().GetWindow().GetWidth();
+		auto height = Velocity::Application::Get().GetWindow().GetHeight();
+
+		fbSpec.Width = width;
+		fbSpec.Height = height;
+		m_Framebuffer = Velocity::Framebuffer::Create(fbSpec);
+
 		m_Scene = std::make_unique<Velocity::Scene>();
 
 		m_CameraPosition = m_Camera.GetPosition();
@@ -160,7 +168,7 @@ public:
 		Velocity::RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
 
 		// flat color shapes
-		/*
+		
 		{
 			float flatColorCubeVertices[3 * 8] = // 8 vertices in a cube, 3 floats each vertex position
 			{
@@ -250,7 +258,7 @@ public:
 			m_FlatColorShader.reset(Velocity::Shader::Create(flatColorVertexSrc, flatColorFragSrc));
 		}
 		
-		*/
+		
 
 		// some coords need to be duplicated because of differing texture coords
 		float texturedCubeVertices[5 * 24] = 
@@ -355,7 +363,7 @@ public:
 				)";
 
 			//m_TextureShader = Velocity::Shader::Create("Texture", textureVertexSrc, textureFragSrc);
-			*/
+			
 			m_TextureShader = Velocity::Shader::Create("Assets/Shaders/texture.glsl");
 			m_Texture = Velocity::Texture2D::Create("Assets/Textures/stonebrick.png");
 
@@ -421,13 +429,13 @@ public:
 			firstMouse = true;
 
 		m_Timers["Render"].Begin();
-
+		m_Framebuffer->Bind();
 		Velocity::RenderCommand::Clear();
 		Velocity::Renderer::BeginScene(m_Camera);
 		m_Texture->Bind();
 		Velocity::Renderer::Submit(m_Scene->GetRegistry(), m_TextureShader);
 		Velocity::Renderer::EndScene();
-
+		m_Framebuffer->Unbind();
 		m_Timers["Render"].Stop();
 	
 
@@ -436,40 +444,46 @@ public:
 
 	virtual void OnImGuiRender(float deltaTime) override
 	{
-		ImGui::Begin("Perspective Camera");
-		{
-			glm::vec3 camPos = m_Camera.GetPosition();
-
-			ImGui::Text("Camera Position");
-			ImGui::Text("%.2f   %.2f   %.2f", camPos.x, camPos.y, camPos.z);
-
-			ImGui::Text("Camera Rotation");
-			ImGui::Text("Pitch: %.2f   Yaw: %.2f", m_Camera.GetPitch(), m_Camera.GetYaw());
-
-			float speed = m_Camera.GetCameraSpeed();
-			ImGui::PushItemWidth(100.0f);
-			ImGui::SliderFloat("Camera Speed", &speed, 0.1f, 4.0f);
-			m_Camera.SetCameraSpeed(speed);
-
-			float fov = m_Camera.GetFOV();
-			ImGui::Text("Camera FOV: %.2f", m_Camera.GetFOV());
-		}
-		ImGui::End();
-
-		ImGui::Begin("Profiling", NULL, ImGuiWindowFlags_AlwaysAutoResize);
-		{
-			auto [api, version] = Velocity::RenderCommand::GetAPIVersion();
-
-			ImGui::Text("%s: %s", "GPU", Velocity::RenderCommand::GetGPU());
-			ImGui::Text("%s %s", api, version);
-
-			// FIX PROFILING
-			for (auto& timer : m_Timers)
+			// Camera values
 			{
-				ImGui::Text("%.3fms  %s", timer.second.GetDuration(), timer.first);
+				ImGui::Begin("Perspective Camera");
+				glm::vec3 camPos = m_Camera.GetPosition();
+
+				ImGui::Text("Camera Position");
+				ImGui::Text("%.2f   %.2f   %.2f", camPos.x, camPos.y, camPos.z);
+
+				ImGui::Text("Camera Rotation");
+				ImGui::Text("Pitch: %.2f   Yaw: %.2f", m_Camera.GetPitch(), m_Camera.GetYaw());
+
+				float speed = m_Camera.GetCameraSpeed();
+				ImGui::PushItemWidth(100.0f);
+				ImGui::SliderFloat("Camera Speed", &speed, 0.1f, 4.0f);
+				m_Camera.SetCameraSpeed(speed);
+
+				float fov = m_Camera.GetFOV();
+				ImGui::Text("Camera FOV: %.2f", m_Camera.GetFOV());
+				ImGui::End();
 			}
+
+			// Profiling Window
+			{
+				ImGui::Begin("Profiling", NULL, ImGuiWindowFlags_AlwaysAutoResize);
+				auto [api, version] = Velocity::RenderCommand::GetAPIVersion();
+
+				ImGui::Text("%s: %s", "GPU", Velocity::RenderCommand::GetGPU());
+				ImGui::Text("%s %s", api, version);
+
+				// FIX PROFILING
+				for (auto& timer : m_Timers)
+				{
+					ImGui::Text("%.3fms  %s", timer.second.GetDuration(), timer.first);
+				}
+				ImGui::End();
+			}
+
+			// end dockspace
+			ImGui::End();
 		}
-		ImGui::End();
 	}
 
 	void OnEvent(Velocity::Event& event) override
@@ -499,7 +513,7 @@ public:
 		// Rendering
 		Velocity::Ref<Velocity::Shader> m_FlatColorShader, m_TextureShader;
 		Velocity::Ref<Velocity::Texture2D> m_Texture;
-		
+		Velocity::Ref<Velocity::Framebuffer> m_Framebuffer;
 
 		Velocity::Scope<Velocity::Scene> m_Scene;
 		std::unordered_map<const char*, Velocity::Timer> m_Timers;
@@ -531,3 +545,4 @@ Velocity::Application* Velocity::CreateApplication()
 {
 	return new Sandbox();
 }
+*/

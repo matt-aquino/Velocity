@@ -16,7 +16,7 @@ namespace Velocity
 			METAL = 4,   // Apple exclusive
 			GLES = 5	 // mobile devices and older hardware
 		};
-
+		virtual ~RendererAPI() = default;
 		virtual void Init() = 0;
 		virtual void SetClearColor(const glm::vec4& color) = 0;
 		virtual void Clear() = 0;

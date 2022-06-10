@@ -37,9 +37,6 @@ namespace Velocity
 			deltaTime = time - lastTime;
 			lastTime = time;
 
-			if (Input::IsKeyPressed(VL_KEY_ESCAPE))
-				m_Running = false;
-
 			if (!m_AppMinimized)
 			{
 				// update all our layers
@@ -86,7 +83,7 @@ namespace Velocity
 	void Application::OnEvent(Event & e)
 	{
 		EventDispatcher dispatcher(e);
-		dispatcher.Dispatch<WindowCloseEvent>(BIND_EVENT_FUNC(OnWindowClose));
+		dispatcher.Dispatch<WindowCloseEvent>(BIND_EVENT_FUNC(OnWindowClose)); // allows application to close by hitting the window button
 		dispatcher.Dispatch<WindowResizeEvent>(BIND_EVENT_FUNC(OnWindowResize));
 
 		for (auto it = m_LayerStack.end(); it != m_LayerStack.begin();)

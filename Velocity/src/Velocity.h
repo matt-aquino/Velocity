@@ -27,6 +27,7 @@
 #include "Velocity/Renderer/Shader.h"
 #include "Velocity/Renderer/Camera.h"
 #include "Velocity/Renderer/Texture.h"
+#include "Velocity/Renderer/Framebuffer.h"
 
 // ENTRY POINT
 #include "Velocity/Core/EntryPoint.h"
